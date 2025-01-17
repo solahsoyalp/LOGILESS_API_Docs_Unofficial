@@ -165,7 +165,7 @@
 1. このリポジトリをクローンします。
 
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/solahsoyalp/LOGILESS_API_Unofficial_Docs.git
    ```
 
 2. 各Markdownファイルを開き、必要な情報を確認してください。
