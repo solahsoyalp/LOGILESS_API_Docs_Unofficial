@@ -1,14 +1,6 @@
+# 入荷予定伝票
 
-
-入荷予定伝票
-======
-
-
-プロパティ
------
-
-
-
+## プロパティ
 
 | プロパティ | 説明 |
 | --- | --- |
@@ -17,8 +9,8 @@
 | object\_code | [読取専用] 入荷予定管理番号 |
 | document\_date | 伝票日付 - `Y-m-d`形式 (例 : `2018-01-01`) |
 | posting\_date | 転記日付 - `Y-m-d`形式 (例 : `2018-01-01`) |
-| inbound\_delivery\_category | [入荷予定カテゴリ](type/.mdinbound_delivery_category) |
-| status | [入荷予定ステータス](type/.mdinbound_delivery_status) |
+| inbound\_delivery\_category | [入荷予定カテゴリ](type/inbound_delivery_category.md) |
+| status | [入荷予定ステータス](type/inbound_delivery_status.md) |
 | supplier\_code | [登録時のみ] 仕入先コード |
 | supplier\_name | 仕入先名 |
 | supplier\_name\_kana | 仕入先名かな |
@@ -42,8 +34,8 @@
 | recipient\_phone | お届け先 電話番号 |
 | recipient\_fax | お届け先 FAX番号 |
 | subtotal | [読取専用] 商品合計金額（小計） |
-| tax\_processing\_method | [税の計算順序](type/.mdtax_processing_method) - デフォルトは マーチャントの設定 |
-| tax\_rounding\_method | [税の丸め](type/.mdtax_rounding_method) - デフォルトは マーチャントの設定 |
+| tax\_processing\_method | [税の計算順序](type/tax_processing_method.md) - デフォルトは マーチャントの設定 |
+| tax\_rounding\_method | [税の丸め](type/tax_rounding_method.md) - デフォルトは マーチャントの設定 |
 | document\_tax\_rate | 伝票の税率 - デフォルトは `10` |
 | tax\_total | [読取専用] 税の合計 |
 | total | [読取専用] 合計金額 |
@@ -65,13 +57,9 @@
 | updated\_at | [読取専用] 更新日時 - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) |
 | lines | 明細行 - [lines](#property_lines)のプロパティを参照 |
 | supplier | 仕入先 - [supplier](#property_supplier)のプロパティを参照 |
-| warehouse | 倉庫 - [warehouse](interface/.mdwarehouse)のプロパティを参照 |
-
+| warehouse | 倉庫 - [warehouse](interface/warehouse.md)のプロパティを参照 |
 
 ### lines
-
-
-
 
 | プロパティ | 説明 |
 | --- | --- |
@@ -86,20 +74,16 @@
 | price | 価格 - デフォルトは `0` |
 | quantity | 数量 |
 | received\_quantity | 検品済み数量 |
-| tax\_indicator | [税区分](type/.mdtax_indicator) - デフォルトは `Included` |
+| tax\_indicator | [税区分](type/tax_indicator.md) - デフォルトは `Included` |
 | tax\_rate | 税率 - デフォルトは `10` |
 | subtotal | [読取専用] 小計 |
 | article | [読取専用] 商品マスタ - [article](#property_article)のプロパティを参照 |
 | is\_partial\_cancel | 一部キャンセルかどうか キャンセルの場合は`1`そうでない場合は`0` |
-| status | [明細ステータス](type/.mdinbound_delivery_status) |
+| status | [明細ステータス](type/inbound_delivery_status.md) |
 | created\_at | 登録日時 - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) |
 | updated\_at | 更新日時 - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) |
 
-
 ### supplier
-
-
-
 
 | プロパティ | 説明 |
 | --- | --- |
@@ -109,11 +93,7 @@
 | created\_at | 登録日時 - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) |
 | updated\_at | 更新日時 - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) |
 
-
 ### article
-
-
-
 
 | プロパティ | 説明 |
 | --- | --- |
@@ -125,32 +105,21 @@
 | name | [必須] 商品名 |
 | name\_kana | 商品名かな |
 
-
 ### プロパティの各項目について
-
 
 レスポンスデータには "値が設定されている項目" についてのみ返却します
 
-
-エンドポイント
--------
-
+## エンドポイント
 
 * [入荷予定伝票の一覧を取得](#get_list)
 * [入荷予定伝票を登録](#post)
 * [入荷予定伝票をキャンセル](#reversal)
 
-
 ### 入荷予定伝票の一覧を取得
-
 
 #### リクエスト
 
-
 `GET /api/v1/merchant/#{merchant_id}/inbound_deliveries`
-
-
-
 
 | パラメーター | 説明 |
 | --- | --- |
@@ -158,7 +127,7 @@
 | page | ページ - デフォルトは `1` |
 | id | ID |
 | code | 入荷予定コード |
-| status | [入荷予定ステータス](type/.mdinbound_delivery_status) - 複数指定する場合はカンマ区切り |
+| status | [入荷予定ステータス](type/inbound_delivery_status.md) - 複数指定する場合はカンマ区切り |
 | ordered\_at\_from | 作成日時（From） - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) |
 | ordered\_at\_to | 作成日時（To） - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) |
 | finished\_at\_from | 完了日時（From） - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) |

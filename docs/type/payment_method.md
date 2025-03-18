@@ -1,14 +1,6 @@
+# 支払方法
 
-
-支払方法
-====
-
-
-一覧
---
-
-
-
+## 一覧
 
 | 値 | 説明 |
 | --- | --- |
@@ -45,6 +37,3 @@
 | `paypay_credit` | PayPayクレジット |
 | `qoo10_payment` | Qoo10での支払い |
 | `shopify_payment_gateway` | Shopify決済ゲートウェイ |
-
-
-

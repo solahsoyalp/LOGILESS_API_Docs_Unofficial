@@ -1,14 +1,6 @@
+# 倉庫別発注点
 
-
-倉庫別発注点
-======
-
-
-プロパティ
------
-
-
-
+## プロパティ
 
 | プロパティ | 説明 |
 | --- | --- |
@@ -18,17 +10,12 @@
 | inventory\_summary\_by\_warehouse | 倉庫別在庫数 - [property\_inventory\_summary\_by\_warehouse](#property_inventory_summary_by_warehouse)のプロパティを参照 |
 | created\_at | 作成日時 - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) |
 | updated\_at | 更新日時 - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) |
-| article | 商品マスタ - [article](interface/.mdarticle)のプロパティを参照 |
-| warehouse | 倉庫 - [warehouse](interface/.mdwarehouse)のプロパティを参照 |
-
+| article | 商品マスタ - [article](interface/article.md)のプロパティを参照 |
+| warehouse | 倉庫 - [warehouse](interface/warehouse.md)のプロパティを参照 |
 
 ### inventory\_summary\_by\_warehouse
 
-
 このプロパティの在庫数はリアルタイムではなく、10分程度の遅延があります。
-
-
-
 
 | プロパティ | 説明 |
 | --- | --- |
@@ -39,34 +26,21 @@
 | allocated | 引当済み |
 | inter\_warehouse\_transfer | 倉庫間移動 - [inter\_warehouse\_transfer](#property_inter_warehouse_transfer)のプロパティを参照 |
 
-
 ### inter\_warehouse\_transfer
-
-
-
 
 | プロパティ | 説明 |
 | --- | --- |
 | waiting\_for\_shipment | 未出荷の倉庫間移動数量 |
 
-
-エンドポイント
--------
-
+## エンドポイント
 
 * [倉庫別発注点の一覧を取得](#get_list)
 
-
 ### 在庫の一覧を取得
-
 
 #### リクエスト
 
-
 `GET /api/v1/merchant/#{merchant_id}/reorder_points`
-
-
-
 
 | パラメーター | 説明 |
 | --- | --- |
@@ -76,13 +50,9 @@
 | warehouse\_id | 倉庫ID |
 | is\_reorder\_level | 発注点割れかどうか |
 
-
 #### レスポンス
 
-
 `HTTP/1.1 200`
-
-
 
 ```
 {

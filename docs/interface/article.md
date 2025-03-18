@@ -1,14 +1,6 @@
+# 商品マスタ
 
-
-商品マスタ
-=====
-
-
-プロパティ
------
-
-
-
+## プロパティ
 
 | プロパティ | 説明 |
 | --- | --- |
@@ -19,9 +11,9 @@
 | model\_number | 型番 |
 | name | [必須] 商品名 |
 | name\_kana | 商品名かな |
-| article\_type | [必須] [商品区分](type/.mdarticle_type) - デフォルトは `Single` （APIで登録可能な商品区分は、`Single`と`Assortment`のみ） |
+| article\_type | [必須] [商品区分](type/article_type.md) - デフォルトは `Single` （APIで登録可能な商品区分は、`Single`と`Assortment`のみ） |
 | price | 価格 |
-| tax\_indicator | [税区分](type/.mdtax_indicator) - デフォルトは `Included` |
+| tax\_indicator | [税区分](type/tax_indicator.md) - デフォルトは `Included` |
 | tax\_rate | 税率 - デフォルトは `8` |
 | list\_price | 定価 |
 | cost | 原価 |
@@ -29,7 +21,7 @@
 | color\_code | カラーコード |
 | size | サイズ |
 | size\_code | サイズコード |
-| temperature\_control | [配送温度](type/.mdtemperature_control) |
+| temperature\_control | [配送温度](type/temperature_control.md) |
 | width | 幅 |
 | height | 高さ |
 | depth | 奥行き |
@@ -57,7 +49,7 @@
 | comment | 備考欄 |
 | unit | 数量単位 |
 | delivery\_category | 配送カテゴリ |
-| default\_delivery\_method | デフォルトの[配送方法](type/.mddelivery_method) |
+| default\_delivery\_method | デフォルトの[配送方法](type/delivery_method.md) |
 | size\_coefficient | サイズ係数 |
 | release\_date | 発売日 - `Y-m-d`形式 (例 : `2018-01-01`) |
 | contents\_description | 内容品欄 |
@@ -68,30 +60,21 @@
 | supplier\_code | [登録時のみ] 仕入先コード |
 | created\_at | [読取専用] 登録日時 - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) |
 | updated\_at | [読取専用] 更新日時 - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) |
-| supplier | [読取専用] 仕入先マスタ - [supplier](interface/.mdsupplier)のプロパティを参照 |
+| supplier | [読取専用] 仕入先マスタ - [supplier](interface/supplier.md)のプロパティを参照 |
 | components | 構成商品 - [component](#property_component)の配列 |
-
 
 ### プロパティの各項目について
 
-
 レスポンスデータには "値が設定されている項目" についてのみ返却します
 
-
 ### component
-
-
-
 
 | プロパティ | 説明 |
 | --- | --- |
 | component | 構成商品の商品コード |
 | quantity | 構成商品の数量 |
 
-
-エンドポイント
--------
-
+## エンドポイント
 
 * [商品マスタの一覧を取得](#get_list)
 * [商品マスタを登録](#post)
@@ -99,17 +82,11 @@
 * [商品マスタを編集](#put)
 * [商品マスタを削除](#delete)
 
-
 ### 商品マスタの一覧を取得
-
 
 #### リクエスト
 
-
 `GET /api/v1/merchant/#{merchant_id}/articles`
-
-
-
 
 | パラメーター | 説明 |
 | --- | --- |
@@ -117,19 +94,15 @@
 | page | ページ - デフォルトは `1` |
 | code | 商品コード |
 | identification\_code | 識別コード |
-| article\_type | [商品区分](type/.mdarticle_type) |
+| article\_type | [商品区分](type/article_type.md) |
 | model\_number | 型番 |
-| default\_delivery\_method | デフォルトの[配送方法](type/.mddelivery_method) |
+| default\_delivery\_method | デフォルトの[配送方法](type/delivery_method.md) |
 | updated\_at\_from | 更新日時（From） - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) |
 | updated\_at\_to | 更新日時（To） - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) |
 
-
 #### レスポンス
 
-
 `HTTP/1.1 200 OK`
-
-
 
 ```
 {
@@ -158,13 +131,9 @@
 
 ### 商品マスタを登録
 
-
 #### リクエスト
 
-
 `POST /api/v1/merchant/#{merchant_id}/articles/new`
-
-
 
 ```
 {
@@ -178,10 +147,7 @@
 
 #### レスポンス
 
-
 `HTTP/1.1 201 Created`
-
-
 
 ```
 {
@@ -202,16 +168,11 @@
 
 ### 商品マスタを複数件まとめて登録
 
-
 #### リクエスト
-
 
 100件までまとめて登録できます。
 
-
 `POST /api/v1/merchant/#{merchant_id}/articles/new/multiple`
-
-
 
 ```
 {
@@ -231,10 +192,7 @@
 
 #### レスポンス
 
-
 `HTTP/1.1 200 OK`
-
-
 
 ```
 [
@@ -270,13 +228,9 @@
 
 ### 商品マスタを編集
 
-
 #### リクエスト
 
-
 `PUT /api/v1/merchant/#{merchant_id}/articles/{id}`
-
-
 
 ```
 {
@@ -289,10 +243,7 @@
 
 #### レスポンス
 
-
 `HTTP/1.1 200 OK`
-
-
 
 ```
 {
@@ -313,19 +264,13 @@
 
 ### 商品マスタを削除
 
-
 #### リクエスト
-
 
 `DELETE /api/v1/merchant/#{merchant_id}/articles/{id}/delete`
 
-
 #### レスポンス
 
-
 `HTTP/1.1 200 OK`
-
-
 
 ```
 {

@@ -1,50 +1,32 @@
-
-
-日次在庫
-====
-
+# 日次在庫
 
 ※この機能を使用するには事前に利用申込が必要です。
 
-
-プロパティ
------
-
-
-
+## プロパティ
 
 | プロパティ | 説明 |
 | --- | --- |
 | id | ID在庫情報をユニークに識別するための数値です。主に、APIでのアクセスに使用します。 |
 | date | 日付 - `Y-m-d`形式 (例 : `2018-01-01`) |
-| layer | [在庫レイヤー](type/.mdinventory_summary_layer) |
+| layer | [在庫レイヤー](type/inventory_summary_layer.md) |
 | received | 入庫待ち |
 | available | 保管中 |
 | blocked | 保留 |
 | allocated | ピッキング中 |
 | created\_at | 作成日時 - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) |
 | updated\_at | 更新日時 - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) |
-| article | 商品マスタ - [article](interface/.mdarticle)のプロパティを参照 |
-| warehouse | 倉庫 - [warehouse](interface/.mdwarehouse)のプロパティを参照 |
+| article | 商品マスタ - [article](interface/article.md)のプロパティを参照 |
+| warehouse | 倉庫 - [warehouse](interface/warehouse.md)のプロパティを参照 |
 
-
-エンドポイント
--------
-
+## エンドポイント
 
 * [在庫の一覧を取得](#get_list)
 
-
 ### 在庫の一覧を取得
-
 
 #### リクエスト
 
-
 `GET /api/v1/merchant/#{merchant_id}/daily_inventory_summaries`
-
-
-
 
 | パラメーター | 説明 |
 | --- | --- |
@@ -54,13 +36,9 @@
 | page | ページ - デフォルトは `1` |
 | warehouse | 倉庫ID |
 
-
 #### レスポンス
 
-
 `HTTP/1.1 200`
-
-
 
 ```
 {

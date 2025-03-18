@@ -1,78 +1,70 @@
+# 受注伝票
 
-
-受注伝票
-====
-
-
-プロパティ
------
-
-
-
+## プロパティ
 
 | プロパティ | 説明 |
 | --- | --- |
 | id | [読取専用] ID受注伝票をユニークに識別するための数値です。主に、APIでのアクセスに使用します。受注コードとは異なります。 |
 | code | [必須] 受注コード |
-| parent\_code | 親受注コード |
-| document\_status | [読取専用] [伝票ステータス](errors.md#伝票ステータス) |
-| allocation\_status | [読取専用] [引当ステータス](type/.mdallocation_status) |
-| delivery\_status | [読取専用] [配送ステータス](type/.mddelivery_status) |
-| incoming\_payment\_status | [入金ステータス](type/.mdincoming_payment_status) |
-| authorization\_status | [承認ステータス](type/.mdauthorization_status) |
-| customer\_code | 顧客コード |
-| buyer\_name1 | [必須] 購入者名(1) |
-| buyer\_name2 | 購入者名(2) |
-| buyer\_name\_kana1 | 購入者名かな(1) |
-| buyer\_name\_kana2 | 購入者名かな(2) |
-| buyer\_country | 購入者 国 - デフォルトは `JP` |
-| buyer\_post\_code | 購入者 郵便番号 |
-| buyer\_prefecture | 購入者 都道府県 |
-| buyer\_address1 | 購入者 住所1 |
-| buyer\_address2 | 購入者 住所2 |
-| buyer\_address3 | 購入者 住所3 |
-| buyer\_phone | 購入者 電話番号 |
-| buyer\_fax | 購入者 FAX番号 |
-| buyer\_email | 購入者メールアドレス |
-| recipient\_name1 | [必須] お届け先名(1) |
-| recipient\_name2 | お届け先名(2) |
-| recipient\_name\_kana1 | お届け先名かな(1) |
-| recipient\_name\_kana2 | お届け先名かな(2) |
-| recipient\_country | お届け先 国 - デフォルトは `JP` |
-| recipient\_post\_code | お届け先 郵便番号 |
-| recipient\_prefecture | お届け先 都道府県 |
-| recipient\_address1 | [必須] お届け先 住所1 |
-| recipient\_address2 | お届け先 住所2 |
-| recipient\_address3 | お届け先 住所3 |
-| recipient\_phone | お届け先 電話番号 |
-| recipient\_fax | お届け先 FAX番号 |
-| recipient\_email | お届け先 メールアドレス |
+| parent_code | 親受注コード |
+| document_status | [読取専用] [伝票ステータス](../document_status/document_status.md) |
+| allocation_status | [読取専用] [引当ステータス](../document_status/allocation_status.md) |
+| delivery_status | [読取専用] [配送ステータス](../document_status/delivery_status.md) |
+| incoming_payment_status | [入金ステータス](../document_status/incoming_payment_status.md) |
+| authorization_status | [承認ステータス](../document_status/authorization_status.md) |
+| customer_code | 顧客コード |
+| buyer_name1 | [必須] 購入者名(1) |
+| buyer_name2 | 購入者名(2) |
+| buyer_name_kana1 | 購入者名かな(1) |
+| buyer_name_kana2 | 購入者名かな(2) |
+| buyer_country | 購入者 国 - デフォルトは `JP` |
+| buyer_post_code | 購入者 郵便番号 |
+| buyer_prefecture | 購入者 都道府県 |
+| buyer_address1 | 購入者 住所1 |
+| buyer_address2 | 購入者 住所2 |
+| buyer_address3 | 購入者 住所3 |
+| buyer_phone | 購入者 電話番号 |
+| buyer_fax | 購入者 FAX番号 |
+| buyer_email | 購入者メールアドレス |
+| recipient_name1 | [必須] お届け先名(1) |
+| recipient_name2 | お届け先名(2) |
+| recipient_name_kana1 | お届け先名かな(1) |
+| recipient_name_kana2 | お届け先名かな(2) |
+| recipient_country | お届け先 国 - デフォルトは `JP` |
+| recipient_post_code | お届け先 郵便番号 |
+| recipient_prefecture | お届け先 都道府県 |
+| recipient_address1 | [必須] お届け先 住所1 |
+| recipient_address2 | お届け先 住所2 |
+| recipient_address3 | お届け先 住所3 |
+| recipient_phone | お届け先 電話番号 |
+| recipient_fax | お届け先 FAX番号 |
+| recipient_email | お届け先 メールアドレス |
 | subtotal | [読取専用] 商品合計金額（小計） |
-| use\_point | ポイント利用 - デフォルトは `0` |
-| use\_coupon | クーポン利用 - デフォルトは `0` |
-| delivery\_fee | 送料 - デフォルトは `0` |
-| sundry\_fee | その他手数料 - デフォルトは `0` |
+| use_point | ポイント利用 - デフォルトは `0` |
+| use_coupon | クーポン利用 - デフォルトは `0` |
+| delivery_fee | 送料 - デフォルトは `0` |
+| sundry_fee | その他手数料 - デフォルトは `0` |
 | discount | 値引き - デフォルトは `0` |
-| tax\_processing\_method | [税の計算順序](type/.mdtax_processing_method) - デフォルトは マーチャントの設定 |
-| tax\_rounding\_method | [税の丸め](type/.mdtax_rounding_method) - デフォルトは マーチャントの設定 |
-| document\_tax\_rate | 伝票の税率 - デフォルトは `0` |
-| tax\_total | 税の合計 - 登録時のデフォルトは `NULL` （数値を指定した場合、税の自動計算が行われなくなります。） |
+| tax_processing_method | [税の計算順序](../document_status/tax_processing_method.md) - デフォルトは マーチャントの設定 |
+| tax_rounding_method | [税の丸め](../document_status/tax_rounding_method.md) - デフォルトは マーチャントの設定 |
+| document_tax_rate | 伝票の税率 - デフォルトは `0` |
+| tax_total | 税の合計 - 登録時のデフォルトは `NULL` （数値を指定した場合、税の自動計算が行われなくなります。） |
 | total | [読取専用] 合計金額 |
-| payment\_method | [必須] [支払方法](type/.mdpayment_method) |
-| delivery\_method | [必須] [配送方法](type/.mddelivery_method) |
-| delivery\_package\_quantity | 梱包数 - デフォルトは `1` |
-| express\_type | [お急ぎ区分](type/.mdexpress_type) |
-| delivery\_temperature\_control | [配送温度](type/.mdtemperature_control) - デフォルトは `Normal` |
-| scheduled\_shipping\_date | [登録時のみ - 出荷伝票に転記] 出荷予定日 - `Y-m-d`形式 (例 : `2018-01-01`) |
-| delivery\_preferred\_date | お届け希望日 - `Y-m-d`形式 (例 : `2018-01-01`) |
-| delivery\_preferred\_time\_zone | お届け希望時間帯 |
-| is\_isolated\_area | 離島かどうか - 離島の場合は `1` |
-| delivery\_tracking\_number | 送り状番号出荷伝票に登録された送り状番号のうち、1つを返却します。 |
-| buyer\_comment | 購入者備考欄 |
-| merchant\_comment | マーチャント備考欄 |
-| statement\_notes | 納品書 特記事項 |
-| picking\_notes | 出荷指示書 特記事項 |
-| way\_bill\_notes | 送り状 特記事項 |
+| payment_method | [必須] [支払方法](../document_status/payment_method.md) |
+| delivery_method | [必須] [配送方法](../document_status/delivery_method.md) |
+| delivery_package_quantity | 梱包数 - デフォルトは `1` |
+| express_type | [お急ぎ区分](../document_status/express_type.md) |
+| delivery_temperature_control | [配送温度](../document_status/temperature_control.md) - デフォルトは `Normal` |
+| scheduled_shipping_date | [登録時のみ - 出荷伝票に転記] 出荷予定日 - `Y-m-d`形式 (例 : `2018-01-01`) |
+| delivery_preferred_date | お届け希望日 - `Y-m-d`形式 (例 : `2018-01-01`) |
+| delivery_preferred_time_zone | お届け希望時間帯 |
+| is_isolated_area | 離島かどうか - 離島の場合は `1` |
+| delivery_tracking_number | 送り状番号出荷伝票に登録された送り状番号のうち、1つを返却します。 |
+| buyer_comment | 購入者備考欄 |
+| merchant_comment | マーチャント備考欄 |
+| statement_notes | 納品書 特記事項 |
+| picking_notes | 出荷指示書 特記事項 |
+| way_bill_notes | 送り状 特記事項 |
 | gift | ギフトかどうか - ギフトの場合は `1` |
 | wrapping | ラッピング |
 | noshi | 熨斗 |
@@ -86,27 +78,27 @@
 | attr8 | フリー項目8 |
 | attr9 | フリー項目9 |
 | attr10 | フリー項目10 |
-| waiting\_for\_confirmation | [読取専用] 確認待ちかどうか - 確認待ちの場合は `1` |
-| shipping\_confirmed | 出荷通知を実行済みかどうか - 実行済みの場合は `1` |
-| is\_multiple\_deliveries | 出荷が分割されているかどうか - 分割されている場合は `1` |
-| subscription\_id | 定期購入ID |
-| subscription\_delivery\_number | 定期購入 お届け回数 |
-| subscription\_next\_delivery\_date | 定期購入 次回配送日 - `Y-m-d`形式 (例 : `2018-01-01`) |
-| posting\_date | [読取専用] 転記日付 - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) |
-| total\_quantity | [読取専用] 合計数量 |
-| purchasing\_times | 購入回数 |
+| waiting_for_confirmation | [読取専用] 確認待ちかどうか - 確認待ちの場合は `1` |
+| shipping_confirmed | 出荷通知を実行済みかどうか - 実行済みの場合は `1` |
+| is_multiple_deliveries | 出荷が分割されているかどうか - 分割されている場合は `1` |
+| subscription_id | 定期購入ID |
+| subscription_delivery_number | 定期購入 お届け回数 |
+| subscription_next_delivery_date | 定期購入 次回配送日 - `Y-m-d`形式 (例 : `2018-01-01`) |
+| posting_date | [読取専用] 転記日付 - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) |
+| total_quantity | [読取専用] 合計数量 |
+| purchasing_times | 購入回数 |
 | tags | 受注伝票のタグ（配列） |
-| ordered\_at | 注文日時 - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) - デフォルトは現在時刻 |
-| finished\_at | [読取専用] 完了日時 - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) |
-| created\_at | [読取専用] 登録日時 - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) |
-| updated\_at | [読取専用] 更新日時 - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) |
+| ordered_at | 注文日時 - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) - デフォルトは現在時刻 |
+| finished_at | [読取専用] 完了日時 - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) |
+| created_at | [読取専用] 登録日時 - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) |
+| updated_at | [読取専用] 更新日時 - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) |
 | lines | [必須][配列] 明細行 - [line](#property_line)の配列 |
-| outbound\_deliveries | [読取専用] 出荷伝票 - [outbound\_delivery](interface/.mdoutbound_delivery)のプロパティを参照 |
-| store | [必須] 店舗 - 店舗IDで指定 / レスポンスの際は[store](interface/.mdstore)のプロパティを参照 |
+| outbound_deliveries | [読取専用] 出荷伝票 - [outbound_delivery](interface/outbound_delivery.md)のプロパティを参照 |
+| store | [必須] 店舗 - 店舗IDで指定 / レスポンスの際は[store](interface/store.md)のプロパティを参照 |
 | warehouse | [登録時のみ - 出荷伝票に転記] 出荷元倉庫 - 倉庫IDで指定 / 指定がない場合は店舗のデフォルトの出荷元倉庫を使用 |
-| cod\_total | [登録時のみ - 出荷伝票に転記] 代金引換金額 - デフォルトは受注伝票の合計金額（通常は指定しません） |
-| document\_date | 伝票日付 - `Y-m-d`形式 (例 : `2018-01-01`) |
-| payment\_due\_date | [読取専用] 入金期限日 - `Y-m-d`形式 (例 : `2018-01-01`) |
+| cod_total | [登録時のみ - 出荷伝票に転記] 代金引換金額 - デフォルトは受注伝票の合計金額（通常は指定しません） |
+| document_date | 伝票日付 - `Y-m-d`形式 (例 : `2018-01-01`) |
+| payment_due_date | [読取専用] 入金期限日 - `Y-m-d`形式 (例 : `2018-01-01`) |
 
 
 ### line
@@ -118,25 +110,25 @@
 | --- | --- |
 | id | [読取専用] ID受注伝票明細行をユニークに識別するための数値です。主に、APIでのアクセスに使用します。 |
 | code | 明細行コード |
-| status | [読取専用] [明細ステータス](type/.mddocument_line_status) |
-| article\_code | [必須] 商品コード |
-| article\_name | [必須] 商品名 |
-| article\_option | 明細行備考欄 |
+| status | [読取専用] [明細ステータス](../document_status/document_line_status.md) |
+| article_code | [必須] 商品コード |
+| article_name | [必須] 商品名 |
+| article_option | 明細行備考欄 |
 | price | 価格 - デフォルトは `0` |
 | quantity | [必須] 数量 |
-| is\_parent | [読取専用] 親明細行かどうか - 親明細行の場合は `1`そうでない場合は`0` |
-| is\_child | [読取専用] 子明細行かどうか - 子明細行の場合は `1`そうでない場合は`0` |
-| parent\_id | [読取専用] 親明細行ID（子明細行の場合にのみ設定されます） |
-| cached\_allocated\_quantity | [読取専用] 在庫が引き当てられた数量 |
-| is\_partial\_cancel | [読取専用] 一部キャンセルかどうか キャンセルの場合は`1`そうでない場合は`0` |
-| tax\_indicator | [税区分](type/.mdtax_indicator) - デフォルトは `Included` |
-| tax\_rate | 税率 - デフォルトは `10` |
-| tax\_total | [読取専用] 税の合計 |
+| is_parent | [読取専用] 親明細行かどうか - 親明細行の場合は `1`そうでない場合は`0` |
+| is_child | [読取専用] 子明細行かどうか - 子明細行の場合は `1`そうでない場合は`0` |
+| parent_id | [読取専用] 親明細行ID（子明細行の場合にのみ設定されます） |
+| cached_allocated_quantity | [読取専用] 在庫が引き当てられた数量 |
+| is_partial_cancel | [読取専用] 一部キャンセルかどうか キャンセルの場合は`1`そうでない場合は`0` |
+| tax_indicator | [税区分](../document_status/tax_indicator.md) - デフォルトは `Included` |
+| tax_rate | 税率 - デフォルトは `10` |
+| tax_total | [読取専用] 税の合計 |
 | subtotal | [読取専用] 小計 |
 | deadline | （物理在庫の指定）出荷期限日 |
-| lot\_number | （物理在庫の指定）ロット番号 |
-| created\_at | [読取専用] 登録日時 - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) |
-| updated\_at | [読取専用] 更新日時 - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) |
+| lot_number | （物理在庫の指定）ロット番号 |
+| created_at | [読取専用] 登録日時 - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) |
+| updated_at | [読取専用] 更新日時 - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) |
 | article | [読取専用] 商品マスタ - [article](#property_article)のプロパティを参照 |
 | origin | [読取専用] 受注伝票 - [origin](#property_origin)のプロパティを参照 |
 
@@ -150,11 +142,11 @@
 | --- | --- |
 | id | ID商品マスタをユニークに識別するための数値です。主に、APIでのアクセスに使用します。商品コードとは異なります。 |
 | code | 商品コード |
-| identification\_code | 識別コード |
-| object\_code | ロジレスコード |
-| model\_number | 型番 |
+| identification_code | 識別コード |
+| object_code | ロジレスコード |
+| model_number | 型番 |
 | name | 商品名 |
-| name\_kana | 商品名かな |
+| name_kana | 商品名かな |
 
 
 ### origin
@@ -202,25 +194,25 @@ id, codeは単一指定のみリクエストが可能です。
 | limit | 取得する結果の数 - デフォルトは `20` 最大値は `100` |
 | page | ページ - デフォルトは `1` |
 | id | ID |
-| object\_code | 受注管理番号 |
+| object_code | 受注管理番号 |
 | code | 受注コード |
-| parent\_code | 親受注コード |
-| document\_status | [伝票ステータス](errors.md#伝票ステータス) - 複数指定する場合はカンマ区切り |
-| delivery\_status | [配送ステータス](type/.mddelivery_status) - 複数指定する場合はカンマ区切り |
-| incoming\_payment\_status | [入金ステータス](type/.mdincoming_payment_status) - 複数指定する場合はカンマ区切り |
-| authorization\_status | [承認ステータス](type/.mdauthorization_status) - 複数指定する場合はカンマ区切り |
-| allocation\_status | [引当ステータス](type/.mdallocation_status) - 複数指定する場合はカンマ区切り |
-| delivery\_method | [配送方法](type/.mddelivery_method) |
-| waiting\_for\_confirmation | 確認待ちかどうか - 確認待ちの場合は `1`、確認待ちでない場合は `0` |
-| ordered\_at\_from | 注文日時（From） - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) |
-| ordered\_at\_to | 注文日時（To） - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) |
-| finished\_at\_from | 完了日時（From） - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) |
-| finished\_at\_to | 完了日時（To） - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) |
-| updated\_at\_from | 更新日時（From） - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) |
-| updated\_at\_to | 更新日時（To） - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) |
+| parent_code | 親受注コード |
+| document_status | [伝票ステータス](../document_status/document_status.md) - 複数指定する場合はカンマ区切り |
+| delivery_status | [配送ステータス](../document_status/delivery_status.md) - 複数指定する場合はカンマ区切り |
+| incoming_payment_status | [入金ステータス](../document_status/incoming_payment_status.md) - 複数指定する場合はカンマ区切り |
+| authorization_status | [承認ステータス](../document_status/authorization_status.md) - 複数指定する場合はカンマ区切り |
+| allocation_status | [引当ステータス](../document_status/allocation_status.md) - 複数指定する場合はカンマ区切り |
+| delivery_method | [配送方法](../document_status/delivery_method.md) |
+| waiting_for_confirmation | 確認待ちかどうか - 確認待ちの場合は `1`、確認待ちでない場合は `0` |
+| ordered_at_from | 注文日時（From） - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) |
+| ordered_at_to | 注文日時（To） - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) |
+| finished_at_from | 完了日時（From） - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) |
+| finished_at_to | 完了日時（To） - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) |
+| updated_at_from | 更新日時（From） - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) |
+| updated_at_to | 更新日時（To） - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) |
 | store | 店舗 - 店舗ID |
-| scheduled\_shipping\_date\_from | 出荷予定日（From） - `Y-m-d`形式 (例 : `2018-01-01`) |
-| scheduled\_shipping\_date\_to | 出荷予定日（To） - `Y-m-d`形式 (例 : `2018-01-10`) |
+| scheduled_shipping_date_from | 出荷予定日（From） - `Y-m-d`形式 (例 : `2018-01-01`) |
+| scheduled_shipping_date_to | 出荷予定日（To） - `Y-m-d`形式 (例 : `2018-01-10`) |
 
 
 id, codeは単一指定のみリクエストが可能です。
@@ -710,44 +702,44 @@ Request Body
 
 | パラメーター | 説明 |
 | --- | --- |
-| incoming\_payment\_status | [入金ステータス](type/.mdincoming_payment_status) |
-| authorization\_status | [承認ステータス](type/.mdauthorization_status) |
-| buyer\_name1 | 購入者名(1) |
-| buyer\_name2 | 購入者名(2) |
-| buyer\_name\_kana1 | 購入者名かな(1) |
-| buyer\_name\_kana2 | 購入者名かな(2) |
-| buyer\_country | 購入者 国 - デフォルトは `JP` |
-| buyer\_post\_code | 購入者 郵便番号 |
-| buyer\_prefecture | 購入者 都道府県 |
-| buyer\_address1 | 購入者 住所1 |
-| buyer\_address2 | 購入者 住所2 |
-| buyer\_address3 | 購入者 住所3 |
-| buyer\_phone | 購入者 電話番号 |
-| buyer\_fax | 購入者 FAX番号 |
-| buyer\_email | 購入者メールアドレス |
-| recipient\_name1 | お届け先名(1) |
-| recipient\_name2 | お届け先名(2) |
-| recipient\_name\_kana1 | お届け先名かな(1) |
-| recipient\_name\_kana2 | お届け先名かな(2) |
-| recipient\_country | お届け先 国 - デフォルトは `JP` |
-| recipient\_post\_code | お届け先 郵便番号 |
-| recipient\_prefecture | お届け先 都道府県 |
-| recipient\_address1 | [必須] お届け先 住所1 |
-| recipient\_address2 | お届け先 住所2 |
-| recipient\_address3 | お届け先 住所3 |
-| recipient\_phone | お届け先 電話番号 |
-| recipient\_fax | お届け先 FAX番号 |
-| recipient\_email | お届け先 メールアドレス |
-| delivery\_preferred\_date | お届け希望日 - `Y-m-d`形式 (例 : `2018-01-01`) |
-| delivery\_preferred\_time\_zone | お届け希望時間帯 |
-| use\_point | ポイント利用 |
-| use\_coupon | クーポン利用 |
-| delivery\_fee | 送料 |
-| sundry\_fee | その他手数料 |
+| incoming_payment_status | [入金ステータス](../document_status/incoming_payment_status.md) |
+| authorization_status | [承認ステータス](../document_status/authorization_status.md) |
+| buyer_name1 | 購入者名(1) |
+| buyer_name2 | 購入者名(2) |
+| buyer_name_kana1 | 購入者名かな(1) |
+| buyer_name_kana2 | 購入者名かな(2) |
+| buyer_country | 購入者 国 - デフォルトは `JP` |
+| buyer_post_code | 購入者 郵便番号 |
+| buyer_prefecture | 購入者 都道府県 |
+| buyer_address1 | 購入者 住所1 |
+| buyer_address2 | 購入者 住所2 |
+| buyer_address3 | 購入者 住所3 |
+| buyer_phone | 購入者 電話番号 |
+| buyer_fax | 購入者 FAX番号 |
+| buyer_email | 購入者メールアドレス |
+| recipient_name1 | お届け先名(1) |
+| recipient_name2 | お届け先名(2) |
+| recipient_name_kana1 | お届け先名かな(1) |
+| recipient_name_kana2 | お届け先名かな(2) |
+| recipient_country | お届け先 国 - デフォルトは `JP` |
+| recipient_post_code | お届け先 郵便番号 |
+| recipient_prefecture | お届け先 都道府県 |
+| recipient_address1 | [必須] お届け先 住所1 |
+| recipient_address2 | お届け先 住所2 |
+| recipient_address3 | お届け先 住所3 |
+| recipient_phone | お届け先 電話番号 |
+| recipient_fax | お届け先 FAX番号 |
+| recipient_email | お届け先 メールアドレス |
+| delivery_preferred_date | お届け希望日 - `Y-m-d`形式 (例 : `2018-01-01`) |
+| delivery_preferred_time_zone | お届け希望時間帯 |
+| use_point | ポイント利用 |
+| use_coupon | クーポン利用 |
+| delivery_fee | 送料 |
+| sundry_fee | その他手数料 |
 | discount | 値引き |
-| payment\_method | [支払方法](type/.mdpayment_method) |
-| purchasing\_times | 購入回数 |
-| merchant\_comment | マーチャント備考欄 |
+| payment_method | [支払方法](../document_status/payment_method.md) |
+| purchasing_times | 購入回数 |
+| merchant_comment | マーチャント備考欄 |
 | attr1 | フリー項目1 |
 | attr2 | フリー項目2 |
 | attr3 | フリー項目3 |
@@ -944,7 +936,7 @@ Request Body
 
 | パラメーター | 説明 |
 | --- | --- |
-| clears\_code | 同じ受注コードで新規受注の作成を許可 - デフォルトは `false` |
+| clears_code | 同じ受注コードで新規受注の作成を許可 - デフォルトは `false` |
 
 
 

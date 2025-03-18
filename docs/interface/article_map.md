@@ -1,14 +1,6 @@
+# 商品対応表
 
-
-商品対応表
-=====
-
-
-プロパティ
------
-
-
-
+## プロパティ
 
 | プロパティ | 説明 |
 | --- | --- |
@@ -30,11 +22,7 @@
 | created\_at | [読取専用] 登録日時 - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) |
 | updated\_at | [読取専用] 更新日時 - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) |
 
-
 ### article
-
-
-
 
 | プロパティ | 説明 |
 | --- | --- |
@@ -42,43 +30,30 @@
 | code | 商品コード |
 | object\_code | ロジレスコード |
 | name | 商品名 |
-| article\_type | [商品区分](type/.mdarticle_type) - デフォルトは `Single` |
-| tax\_indicator | [税区分](type/.mdtax_indicator) - デフォルトは `Included` |
-| temperature\_control | [配送温度](type/.mdtemperature_control) |
+| article\_type | [商品区分](type/article_type.md) - デフォルトは `Single` |
+| tax\_indicator | [税区分](type/tax_indicator.md) - デフォルトは `Included` |
+| temperature\_control | [配送温度](type/temperature_control.md) |
 | unit | 数量単位 |
 | limiting\_sales | 販売制限数 |
 | created\_at | [読取専用] 商品登録日時 - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) |
 | updated\_at | [読取専用] 商品更新日時 - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) |
 
-
 ### store
-
-
-
 
 | プロパティ | 説明 |
 | --- | --- |
 | id | ID店舗情報をユニークに識別するための数値です。 |
 | name | 店舗名 |
 
-
-エンドポイント
--------
-
+## エンドポイント
 
 * [商品対応表の一覧を取得](#get_list)
 
-
 ### 商品対応表の一覧を取得
-
 
 #### リクエスト
 
-
 `GET /api/v1/merchant/#{merchant_id}/article_maps`
-
-
-
 
 | パラメーター | 説明 |
 | --- | --- |
@@ -91,13 +66,9 @@
 | updated\_at\_from | 更新日時（From） - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) |
 | updated\_at\_to | 更新日時（To） - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) |
 
-
 #### レスポンス
 
-
 `HTTP/1.1 200`
-
-
 
 ```
 {
