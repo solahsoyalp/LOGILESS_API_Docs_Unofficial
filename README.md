@@ -23,133 +23,133 @@
 
 ### interfaceフォルダ
 
-- [**actual_inventory_summary.md**](interface/actual_inventory_summary.md)
+- [**actual_inventory_summary.md**](docs/interface/actual_inventory_summary.md)
 
   - 実際の在庫サマリに関する情報を提供します。
 
-- [**location.md**](interface/location.md)
+- [**location.md**](docs/interface/location.md)
 
   - ロケーション情報の管理について記載されています。
 
-- [**outbound_delivery.md**](interface/outbound_delivery.md)
+- [**outbound_delivery.md**](docs/interface/outbound_delivery.md)
 
   - 出荷配送に関する情報を提供します。
 
-- [**inbound_delivery.md**](interface/inbound_delivery.md)
+- [**inbound_delivery.md**](docs/interface/inbound_delivery.md)
 
   - 入荷配送に関する情報を提供します。
 
-- [**reorder_point.md**](interface/reorder_point.md)
+- [**reorder_point.md**](docs/interface/reorder_point.md)
 
   - 再注文点の設定や管理に関する情報を提供します。
 
-- [**article.md**](interface/article.md)
+- [**article.md**](docs/interface/article.md)
 
   - 商品情報の管理に関する情報を提供します。
 
-- [**inter_warehouse_transfer.md**](interface/inter_warehouse_transfer.md)
+- [**inter_warehouse_transfer.md**](docs/interface/inter_warehouse_transfer.md)
 
   - 倉庫間移動に関する情報を提供します。
 
-- [**transaction_log.md**](interface/transaction_log.md)
+- [**transaction_log.md**](docs/interface/transaction_log.md)
 
   - 取引ログの記録に関する情報を提供します。
 
-- [**supplier.md**](interface/supplier.md)
+- [**supplier.md**](docs/interface/supplier.md)
 
   - サプライヤー情報の管理に関する情報を提供します。
 
-- [**article_map.md**](interface/article_map.md)
+- [**article_map.md**](docs/interface/article_map.md)
 
   - 商品マッピングに関する情報を提供します。
 
-- [**logical_inventory_summary.md**](interface/logical_inventory_summary.md)
+- [**logical_inventory_summary.md**](docs/interface/logical_inventory_summary.md)
 
   - 論理的な在庫サマリについて記載されています。
 
-- [**store.md**](interface/store.md)
+- [**store.md**](docs/interface/store.md)
 
   - 店舗情報の管理について記載されています。
 
-- [**sales_order.md**](interface/sales_order.md)
+- [**sales_order.md**](docs/interface/sales_order.md)
 
   - 受注情報の管理について記載されています。
 
-- [**warehouse.md**](interface/warehouse.md)
+- [**warehouse.md**](docs/interface/warehouse.md)
 
   - 倉庫情報の管理について記載されています。
 
-- [**daily_inventory_summary.md**](interface/daily_inventory_summary.md)
+- [**daily_inventory_summary.md**](docs/interface/daily_inventory_summary.md)
 
   - 日次在庫サマリに関する情報を提供します。
 
 ### document_statusフォルダ
 
-- [**delivery_status.md**](type/delivery_status.md)
+- [**delivery_status.md**](docs/document_status/delivery_status.md)
 
   - 配送ステータスに関する情報を提供します。
 
-- [**authorization_status.md**](type/authorization_status.md)
+- [**authorization_status.md**](docs/document_status/authorization_status.md)
 
   - 認証ステータスに関する情報を提供します。
 
-- [**document_status.md**](type/document_status.md)
+- [**document_status.md**](docs/document_status/document_status.md)
 
   - ドキュメントのステータス管理について記載されています。
 
-- [**article_type.md**](type/article_type.md)
+- [**article_type.md**](docs/document_status/article_type.md)
 
   - 商品タイプに関する情報を提供します。
 
-- [**inbound_delivery_status.md**](type/inbound_delivery_status.md)
+- [**inbound_delivery_status.md**](docs/document_status/inbound_delivery_status.md)
 
   - 入荷配送ステータスについて記載されています。
 
-- [**incoming_payment_status.md**](type/incoming_payment_status.md)
+- [**incoming_payment_status.md**](docs/document_status/incoming_payment_status.md)
 
   - 受領済み支払いのステータスに関する情報を提供します。
 
-- [**tax_rounding_method.md**](type/tax_rounding_method.md)
+- [**tax_rounding_method.md**](docs/document_status/tax_rounding_method.md)
 
   - 税金の丸め方法について記載されています。
 
-- [**delivery_method.md**](type/delivery_method.md)
+- [**delivery_method.md**](docs/document_status/delivery_method.md)
 
   - 配送方法に関する情報を提供します。
 
-- [**document_line_status.md**](type/document_line_status.md)
+- [**document_line_status.md**](docs/document_status/document_line_status.md)
 
   - ドキュメント行のステータスについて記載されています。
 
-- [**tax_processing_method.md**](type/tax_processing_method.md)
+- [**tax_processing_method.md**](docs/document_status/tax_processing_method.md)
 
   - 税金処理の方法について記載されています。
 
-- [**temperature_control.md**](type/temperature_control.md)
+- [**temperature_control.md**](docs/document_status/temperature_control.md)
 
   - 温度管理に関する情報を提供します。
 
-- [**payment_method.md**](type/payment_method.md)
+- [**payment_method.md**](docs/document_status/payment_method.md)
 
   - 支払い方法に関する情報を提供します。
 
-- [**inbound_delivery_category.md**](type/inbound_delivery_category.md)
+- [**inbound_delivery_category.md**](docs/document_status/inbound_delivery_category.md)
 
   - 入荷配送カテゴリに関する情報を提供します。
 
-- [**tax_indicator.md**](type/tax_indicator.md)
+- [**tax_indicator.md**](docs/document_status/tax_indicator.md)
 
   - 税金インジケーターについて記載されています。
 
-- [**express_type.md**](type/express_type.md)
+- [**express_type.md**](docs/document_status/express_type.md)
 
   - エクスプレス配送のタイプについて記載されています。
 
-- [**transaction_type.md**](type/transaction_type.md)
+- [**transaction_type.md**](docs/document_status/transaction_type.md)
 
   - 取引タイプに関する情報を提供します。
 
-- [**inventory_summary_layer.md**](type/inventory_summary_layer.md)
+- [**inventory_summary_layer.md**](docs/document_status/inventory_summary_layer.md)
 
   - 在庫サマリレイヤーについて記載されています。
 
