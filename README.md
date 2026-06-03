@@ -75,6 +75,10 @@
 
   - 受注情報の管理について記載されています。
 
+- [**sales_return.md**](docs/interface/sales_return.md)
+
+  - 売上返品の情報を提供します。
+
 - [**warehouse.md**](docs/interface/warehouse.md)
 
   - 倉庫情報の管理について記載されています。
@@ -88,6 +92,10 @@
 - [**delivery_status.md**](docs/document_status/delivery_status.md)
 
   - 配送ステータスに関する情報を提供します。
+
+- [**allocation_status.md**](docs/document_status/allocation_status.md)
+
+  - 引当ステータスに関する情報を提供します。
 
 - [**authorization_status.md**](docs/document_status/authorization_status.md)
 
