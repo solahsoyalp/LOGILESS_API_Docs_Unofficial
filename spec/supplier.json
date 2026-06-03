@@ -1,0 +1,334 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "LOGILESS API - 仕入先マスタ",
+    "version": "2026.06.04",
+    "description": "非公式。LOGILESS API の仕入先マスタ系。最終確認日: 2026-06-04。公式: https://app2.logiless.com/developer/"
+  },
+  "servers": [
+    {
+      "url": "https://app2.logiless.com/api/v1/merchant/{merchant_id}",
+      "variables": {
+        "merchant_id": {
+          "default": "your-merchant-id",
+          "description": "マーチャントID"
+        }
+      }
+    }
+  ],
+  "security": [
+    {
+      "OAuth2": []
+    }
+  ],
+  "paths": {
+    "/suppliers": {
+      "get": {
+        "summary": "仕入先マスタの一覧を取得",
+        "operationId": "listSuppliers",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "取得する結果の数 - デフォルトは 20 最大値は 100",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 20,
+              "maximum": 100
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "ページ - デフォルトは 1",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "name": "code",
+            "in": "query",
+            "description": "仕入先コード",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "updated_at_from",
+            "in": "query",
+            "description": "更新日時（From） - Y-m-d H:i:s形式 (例 : 2018-01-01 23:59:59)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "updated_at_to",
+            "in": "query",
+            "description": "更新日時（To） - Y-m-d H:i:s形式 (例 : 2018-01-01 23:59:59)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "仕入先マスタの一覧",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SupplierList"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/suppliers/new": {
+      "post": {
+        "summary": "仕入先マスタを登録",
+        "operationId": "createSupplier",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SupplierRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "登録された仕入先マスタ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Supplier"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/suppliers/{id}": {
+      "put": {
+        "summary": "仕入先マスタを編集",
+        "operationId": "updateSupplier",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "仕入先マスタのID",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SupplierRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "編集された仕入先マスタ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Supplier"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "OAuth2": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://app2.logiless.com/oauth/v2/auth",
+            "tokenUrl": "https://app2.logiless.com/oauth2/token",
+            "scopes": {}
+          }
+        }
+      }
+    },
+    "schemas": {
+      "Supplier": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "ID。仕入先マスタをユニークに識別するための数値です。主に、APIでのアクセスに使用します。仕入先コードとは異なります。"
+          },
+          "code": {
+            "type": "string",
+            "description": "仕入先コード"
+          },
+          "name": {
+            "type": "string",
+            "description": "仕入先名"
+          },
+          "name_kana": {
+            "type": "string",
+            "description": "仕入先名かな"
+          },
+          "post_code": {
+            "type": "string",
+            "description": "郵便番号"
+          },
+          "prefecture": {
+            "type": "string",
+            "description": "都道府県"
+          },
+          "address1": {
+            "type": "string",
+            "description": "住所１"
+          },
+          "address2": {
+            "type": "string",
+            "description": "住所２"
+          },
+          "address3": {
+            "type": "string",
+            "description": "住所３"
+          },
+          "phone": {
+            "type": "string",
+            "description": "電話番号"
+          },
+          "fax": {
+            "type": "string",
+            "description": "FAX番号"
+          },
+          "email": {
+            "type": "string",
+            "description": "メールアドレス"
+          },
+          "representative": {
+            "type": "string",
+            "description": "担当者名"
+          },
+          "representative_kana": {
+            "type": "string",
+            "description": "担当者名かな"
+          },
+          "comment": {
+            "type": "string",
+            "description": "コメント"
+          },
+          "attr1": {
+            "type": "string",
+            "description": "フリー項目1"
+          },
+          "attr2": {
+            "type": "string",
+            "description": "フリー項目2"
+          },
+          "attr3": {
+            "type": "string",
+            "description": "フリー項目3"
+          },
+          "attr4": {
+            "type": "string",
+            "description": "フリー項目4"
+          },
+          "attr5": {
+            "type": "string",
+            "description": "フリー項目5"
+          },
+          "attr6": {
+            "type": "string",
+            "description": "フリー項目6"
+          },
+          "attr7": {
+            "type": "string",
+            "description": "フリー項目7"
+          },
+          "attr8": {
+            "type": "string",
+            "description": "フリー項目8"
+          },
+          "attr9": {
+            "type": "string",
+            "description": "フリー項目9"
+          },
+          "attr10": {
+            "type": "string",
+            "description": "フリー項目10"
+          },
+          "keyword": {
+            "type": "string",
+            "description": "検索用キーワード"
+          },
+          "created_at": {
+            "type": "string",
+            "readOnly": true,
+            "description": "登録日時 - Y-m-d H:i:s形式 (例 : 2018-01-01 23:59:59)"
+          },
+          "updated_at": {
+            "type": "string",
+            "readOnly": true,
+            "description": "更新日時 - Y-m-d H:i:s形式 (例 : 2018-01-01 23:59:59)"
+          }
+        }
+      },
+      "SupplierRequest": {
+        "type": "object",
+        "required": [
+          "supplier"
+        ],
+        "properties": {
+          "supplier": {
+            "$ref": "#/components/schemas/Supplier"
+          }
+        }
+      },
+      "SupplierList": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Supplier"
+            }
+          },
+          "current_page": {
+            "type": "integer",
+            "description": "現在のページ"
+          },
+          "limit": {
+            "type": "integer",
+            "description": "取得する結果の数"
+          },
+          "total_count": {
+            "type": "integer",
+            "description": "総件数"
+          }
+        }
+      }
+    }
+  }
+}

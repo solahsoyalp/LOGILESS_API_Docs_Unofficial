@@ -1,0 +1,467 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "LOGILESS API - 売上返品",
+    "version": "2026.06.04",
+    "description": "非公式。LOGILESS API の売上返品系。最終確認日: 2026-06-04。公式: https://app2.logiless.com/developer/"
+  },
+  "servers": [
+    {
+      "url": "https://app2.logiless.com/api/v1/merchant/{merchant_id}",
+      "variables": {
+        "merchant_id": {
+          "default": "your-merchant-id",
+          "description": "マーチャントID"
+        }
+      }
+    }
+  ],
+  "security": [
+    {
+      "OAuth2": []
+    }
+  ],
+  "paths": {
+    "/sales_returns": {
+      "get": {
+        "summary": "売上返品の一覧を取得",
+        "operationId": "listSalesReturns",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "取得する結果の数 - デフォルトは 20 最大値あり",
+            "schema": {
+              "type": "integer",
+              "default": 20
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "ページ - デフォルトは 1",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "name": "sales_order_code",
+            "in": "query",
+            "description": "受注コード",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "article_code",
+            "in": "query",
+            "description": "商品コード",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "article_name",
+            "in": "query",
+            "description": "商品名",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "quantity",
+            "in": "query",
+            "description": "売上返品数量",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "is_approved",
+            "in": "query",
+            "description": "承認済みかどうか - 承認済みの場合は 1、未承認の場合は 0",
+            "schema": {
+              "type": "integer",
+              "enum": [
+                0,
+                1
+              ]
+            }
+          },
+          {
+            "name": "created_at_from",
+            "in": "query",
+            "description": "作成日時（From） - Y-m-d H:i:s形式 (例 : 2018-01-01 23:59:59)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "created_at_to",
+            "in": "query",
+            "description": "作成日時（To） - Y-m-d H:i:s形式 (例 : 2018-01-01 23:59:59)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "approved_at_from",
+            "in": "query",
+            "description": "承認日時（From） - Y-m-d H:i:s形式 (例 : 2018-01-01 23:59:59)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "approved_at_to",
+            "in": "query",
+            "description": "承認日時（To） - Y-m-d H:i:s形式 (例 : 2018-01-01 23:59:59)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SalesReturnListResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "OAuth2": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://app2.logiless.com/oauth/v2/auth",
+            "tokenUrl": "https://app2.logiless.com/oauth2/token",
+            "scopes": {}
+          }
+        }
+      }
+    },
+    "schemas": {
+      "SalesReturn": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "売上返品をユニークに識別するための数値です。主に、APIでのアクセスに使用します。"
+          },
+          "lines": {
+            "type": "array",
+            "description": "返品対象の受注伝票明細行 - lineの配列",
+            "items": {
+              "$ref": "#/components/schemas/SalesReturnLine"
+            }
+          },
+          "quantity": {
+            "type": "integer",
+            "description": "返品数量"
+          },
+          "remarks": {
+            "type": "string",
+            "description": "備考"
+          },
+          "is_approved": {
+            "type": "integer",
+            "description": "承認済みかどうか - 承認済みの場合は 1、未承認の場合は 0",
+            "enum": [
+              0,
+              1
+            ]
+          },
+          "resolution_type": {
+            "type": "string",
+            "description": "対応方法 - Refund（返金）/ Exchange（交換）",
+            "enum": [
+              "Refund",
+              "Exchange"
+            ]
+          },
+          "created_at": {
+            "type": "string",
+            "readOnly": true,
+            "description": "作成日時 - Y-m-d H:i:s形式 (例 : 2018-01-01 23:59:59)"
+          },
+          "updated_at": {
+            "type": "string",
+            "readOnly": true,
+            "description": "更新日時 - Y-m-d H:i:s形式 (例 : 2018-01-01 23:59:59)"
+          },
+          "approved_at": {
+            "type": "string",
+            "readOnly": true,
+            "description": "承認日時 - Y-m-d H:i:s形式 (例 : 2018-01-01 23:59:59)"
+          }
+        }
+      },
+      "SalesReturnLine": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "受注伝票明細行ID"
+          },
+          "code": {
+            "type": "string",
+            "description": "明細行コード"
+          },
+          "article_code": {
+            "type": "string",
+            "description": "商品コード（店舗）"
+          },
+          "article_name": {
+            "type": "string",
+            "description": "商品名"
+          },
+          "article_option": {
+            "type": "string",
+            "description": "明細行備考欄"
+          },
+          "price": {
+            "type": "integer",
+            "description": "販売単価"
+          },
+          "quantity": {
+            "type": "integer",
+            "description": "販売数量"
+          },
+          "parent_id": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "親明細行ID（子明細行の場合にのみ設定されます）"
+          },
+          "tax_indicator": {
+            "type": "string",
+            "description": "税区分",
+            "enum": [
+              "TaxExcluded",
+              "TaxIncluded",
+              "Exempt"
+            ]
+          },
+          "tax_rate": {
+            "type": "number",
+            "description": "税率"
+          },
+          "tax_total": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "税の合計"
+          },
+          "subtotal": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "小計"
+          },
+          "created_at": {
+            "type": "string",
+            "readOnly": true,
+            "description": "登録日時 - Y-m-d H:i:s形式 (例 : 2018-01-01 23:59:59)"
+          },
+          "updated_at": {
+            "type": "string",
+            "readOnly": true,
+            "description": "更新日時 - Y-m-d H:i:s形式 (例 : 2018-01-01 23:59:59)"
+          },
+          "article": {
+            "readOnly": true,
+            "description": "商品マスタ",
+            "$ref": "#/components/schemas/Article"
+          },
+          "sales_order": {
+            "readOnly": true,
+            "description": "受注伝票",
+            "$ref": "#/components/schemas/SalesOrder"
+          }
+        }
+      },
+      "Article": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "商品マスタをユニークに識別するための数値です。主に、APIでのアクセスに使用します。商品コードとは異なります。"
+          },
+          "code": {
+            "type": "string",
+            "description": "商品コード（商品マスタ）"
+          },
+          "identification_code": {
+            "type": "string",
+            "description": "識別コード"
+          },
+          "object_code": {
+            "type": "string",
+            "description": "ロジレスコード"
+          },
+          "model_number": {
+            "type": "string",
+            "description": "型番"
+          },
+          "name": {
+            "type": "string",
+            "description": "商品名"
+          },
+          "name_kana": {
+            "type": "string",
+            "description": "商品名かな"
+          }
+        }
+      },
+      "SalesOrder": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "受注伝票ID"
+          },
+          "code": {
+            "type": "string",
+            "description": "受注コード"
+          },
+          "object_code": {
+            "type": "string",
+            "description": "受注管理番号"
+          },
+          "document_status": {
+            "type": "string",
+            "readOnly": true,
+            "description": "伝票ステータス",
+            "enum": [
+              "Processing",
+              "WaitingForPayment",
+              "WaitingForAllocation",
+              "WaitingForShipment",
+              "Shipped",
+              "Cancel"
+            ]
+          },
+          "use_point": {
+            "type": "integer",
+            "description": "ポイント利用"
+          },
+          "use_coupon": {
+            "type": "integer",
+            "description": "クーポン利用"
+          },
+          "delivery_fee": {
+            "type": "integer",
+            "description": "送料"
+          },
+          "sundry_fee": {
+            "type": "integer",
+            "description": "その他手数料"
+          },
+          "discount": {
+            "type": "integer",
+            "description": "値引き"
+          },
+          "attr1": {
+            "type": "string",
+            "description": "フリー項目1"
+          },
+          "attr2": {
+            "type": "string",
+            "description": "フリー項目2"
+          },
+          "attr3": {
+            "type": "string",
+            "description": "フリー項目3"
+          },
+          "attr4": {
+            "type": "string",
+            "description": "フリー項目4"
+          },
+          "attr5": {
+            "type": "string",
+            "description": "フリー項目5"
+          },
+          "attr6": {
+            "type": "string",
+            "description": "フリー項目6"
+          },
+          "attr7": {
+            "type": "string",
+            "description": "フリー項目7"
+          },
+          "attr8": {
+            "type": "string",
+            "description": "フリー項目8"
+          },
+          "attr9": {
+            "type": "string",
+            "description": "フリー項目9"
+          },
+          "attr10": {
+            "type": "string",
+            "description": "フリー項目10"
+          },
+          "store_coupon": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "クーポン利用（ストア発行）"
+          },
+          "mall_coupon": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "クーポン利用（モール発行）"
+          },
+          "finished_at": {
+            "type": "string",
+            "readOnly": true,
+            "description": "完了日時 - Y-m-d H:i:s形式 (例 : 2018-01-01 23:59:59)"
+          },
+          "created_at": {
+            "type": "string",
+            "readOnly": true,
+            "description": "登録日時 - Y-m-d H:i:s形式 (例 : 2018-01-01 23:59:59)"
+          },
+          "updated_at": {
+            "type": "string",
+            "readOnly": true,
+            "description": "更新日時 - Y-m-d H:i:s形式 (例 : 2018-01-01 23:59:59)"
+          }
+        }
+      },
+      "SalesReturnListResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "description": "売上返品オブジェクトの配列",
+            "items": {
+              "$ref": "#/components/schemas/SalesReturn"
+            }
+          },
+          "current_page": {
+            "type": "integer",
+            "description": "現在のページ番号"
+          },
+          "limit": {
+            "type": "integer",
+            "description": "1ページあたりの取得数"
+          },
+          "total_count": {
+            "type": "integer",
+            "description": "合致するレコード総数"
+          }
+        }
+      }
+    }
+  }
+}

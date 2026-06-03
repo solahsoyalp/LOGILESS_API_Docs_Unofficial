@@ -1,0 +1,974 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "LOGILESS API - 商品マスタ",
+    "version": "2026.06.04",
+    "description": "非公式。LOGILESS API の商品マスタ系。最終確認日: 2026-06-04。公式: https://app2.logiless.com/developer/"
+  },
+  "servers": [
+    {
+      "url": "https://app2.logiless.com/api/v1/merchant/{merchant_id}",
+      "variables": {
+        "merchant_id": {
+          "default": "your-merchant-id",
+          "description": "マーチャントID"
+        }
+      }
+    }
+  ],
+  "security": [
+    {
+      "OAuth2": []
+    }
+  ],
+  "paths": {
+    "/articles": {
+      "get": {
+        "summary": "商品マスタの一覧を取得",
+        "operationId": "listArticles",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "取得する結果の数 - デフォルトは 20 最大値は 100",
+            "schema": {
+              "type": "integer",
+              "default": 20,
+              "maximum": 100
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "ページ - デフォルトは 1",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "name": "code",
+            "in": "query",
+            "description": "商品コード",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "identification_code",
+            "in": "query",
+            "description": "識別コード",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "article_type",
+            "in": "query",
+            "description": "商品区分",
+            "schema": {
+              "$ref": "#/components/schemas/ArticleType"
+            }
+          },
+          {
+            "name": "model_number",
+            "in": "query",
+            "description": "型番",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "default_delivery_method",
+            "in": "query",
+            "description": "デフォルトの配送方法",
+            "schema": {
+              "$ref": "#/components/schemas/DeliveryMethod"
+            }
+          },
+          {
+            "name": "updated_at_from",
+            "in": "query",
+            "description": "更新日時（From） - Y-m-d H:i:s形式 (例 : 2018-01-01 23:59:59)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "updated_at_to",
+            "in": "query",
+            "description": "更新日時（To） - Y-m-d H:i:s形式 (例 : 2018-01-01 23:59:59)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Article"
+                      }
+                    },
+                    "current_page": {
+                      "type": "integer"
+                    },
+                    "limit": {
+                      "type": "integer"
+                    },
+                    "total_count": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/articles/new": {
+      "post": {
+        "summary": "商品マスタを登録",
+        "operationId": "createArticle",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "article"
+                ],
+                "properties": {
+                  "article": {
+                    "$ref": "#/components/schemas/ArticleInput"
+                  }
+                }
+              },
+              "example": {
+                "article": {
+                  "code": "test-1",
+                  "name": "商品(1)"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Article"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/articles/new/multiple": {
+      "post": {
+        "summary": "商品マスタを複数件まとめて登録",
+        "operationId": "createArticlesMultiple",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "articles"
+                ],
+                "properties": {
+                  "articles": {
+                    "type": "array",
+                    "description": "100件までまとめて登録できます。",
+                    "items": {
+                      "$ref": "#/components/schemas/ArticleInput"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "articles": [
+                  {
+                    "code": "test-1",
+                    "name": "商品(1)"
+                  },
+                  {
+                    "code": "test-2",
+                    "name": "商品(2)"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Article"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/articles/{id}": {
+      "put": {
+        "summary": "商品マスタを編集",
+        "operationId": "updateArticle",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "商品マスタID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "article"
+                ],
+                "properties": {
+                  "article": {
+                    "$ref": "#/components/schemas/ArticleInput"
+                  }
+                }
+              },
+              "example": {
+                "article": {
+                  "name": "テスト商品(1)_編集"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Article"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/articles/{id}/delete": {
+      "delete": {
+        "summary": "商品マスタを削除",
+        "operationId": "deleteArticle",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "商品マスタID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "code": "200",
+                  "message": "article is successfully deleted"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "OAuth2": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://app2.logiless.com/oauth/v2/auth",
+            "tokenUrl": "https://app2.logiless.com/oauth2/token",
+            "scopes": {}
+          }
+        }
+      }
+    },
+    "schemas": {
+      "ArticleType": {
+        "type": "string",
+        "description": "商品区分。Single: 通常商品, Assortment: セット商品, Crate: 集合包装（APIで登録可能な商品区分は Single と Assortment のみ）",
+        "enum": [
+          "Single",
+          "Assortment",
+          "Crate"
+        ]
+      },
+      "TaxIndicator": {
+        "type": "string",
+        "description": "税区分。TaxExcluded: 外税, TaxIncluded: 内税, Exempt: 非課税",
+        "enum": [
+          "TaxExcluded",
+          "TaxIncluded",
+          "Exempt"
+        ]
+      },
+      "TemperatureControl": {
+        "type": "string",
+        "description": "配送温度。Normal: 通常, Cold: 冷蔵, Frozen: 冷凍",
+        "enum": [
+          "Normal",
+          "Cold",
+          "Frozen"
+        ]
+      },
+      "DeliveryMethod": {
+        "type": "string",
+        "description": "配送方法",
+        "enum": [
+          "yamato",
+          "yamato_compact",
+          "yamato_nekoposu",
+          "yamato_mail",
+          "yamato_poa",
+          "sagawa",
+          "sagawa_mail",
+          "sagawa_yu_mail",
+          "you_pack",
+          "you_pack_poa",
+          "yu_packet",
+          "yu_packet_1cm",
+          "yu_packet_2cm",
+          "yu_packet_3cm",
+          "yu_mail",
+          "yu_mail_150g",
+          "yu_mail_250g",
+          "yu_mail_500g",
+          "yu_mail_1000g",
+          "letter_pack_plus",
+          "letter_pack_light",
+          "standard_size_mail",
+          "non_standard_size_mail",
+          "click_post",
+          "ems",
+          "international_e_packet",
+          "acceptance_recorded_mail",
+          "small_packing",
+          "seino_express",
+          "seino_mini",
+          "ecohai",
+          "dhl",
+          "fed_ex",
+          "ups",
+          "ecms",
+          "pegasus",
+          "global_e_parcel",
+          "rakuten_express",
+          "rakuten_express_mail",
+          "yamato_rakuten_cvs_receipt",
+          "japan_post_rakuten_cvs_receipt",
+          "japan_post_rakuten_po_receipt",
+          "sagawa_rakuten_cvs_receipt",
+          "yamato_box_charter",
+          "jad",
+          "sbs_sokuhai",
+          "nittsu",
+          "nittsu_express_high_speed",
+          "fukutsu",
+          "tonami",
+          "kinbutsu_rex",
+          "toll_express",
+          "kurume",
+          "sanyo_jidosha",
+          "last_one_mile_personal_delivery",
+          "last_one_mile_business_delivery",
+          "delivery_provider",
+          "in_store_pickup",
+          "in_warehouse_pickup",
+          "manufacturer_direct",
+          "charter"
+        ]
+      },
+      "Component": {
+        "type": "object",
+        "description": "構成商品",
+        "properties": {
+          "component": {
+            "type": "string",
+            "description": "構成商品の商品コード"
+          },
+          "quantity": {
+            "type": "integer",
+            "description": "構成商品の数量"
+          }
+        }
+      },
+      "ArticleInput": {
+        "type": "object",
+        "description": "商品マスタ（リクエスト用）",
+        "required": [
+          "name",
+          "article_type"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "商品コード"
+          },
+          "identification_code": {
+            "type": "string",
+            "description": "識別コード"
+          },
+          "object_code": {
+            "type": "string",
+            "description": "ロジレスコード"
+          },
+          "model_number": {
+            "type": "string",
+            "description": "型番"
+          },
+          "name": {
+            "type": "string",
+            "description": "[必須] 商品名"
+          },
+          "name_kana": {
+            "type": "string",
+            "description": "商品名かな"
+          },
+          "article_type": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ArticleType"
+              }
+            ],
+            "description": "[必須] 商品区分 - デフォルトは Single （APIで登録可能な商品区分は、SingleとAssortmentのみ）",
+            "default": "Single"
+          },
+          "price": {
+            "type": "integer",
+            "description": "価格"
+          },
+          "tax_indicator": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TaxIndicator"
+              }
+            ],
+            "description": "税区分 - デフォルトは Included",
+            "default": "TaxIncluded"
+          },
+          "tax_rate": {
+            "type": "number",
+            "description": "税率 - デフォルトは 8",
+            "default": 8
+          },
+          "list_price": {
+            "type": "integer",
+            "description": "定価"
+          },
+          "cost": {
+            "type": "integer",
+            "description": "原価"
+          },
+          "color": {
+            "type": "string",
+            "description": "カラー"
+          },
+          "color_code": {
+            "type": "string",
+            "description": "カラーコード"
+          },
+          "size": {
+            "type": "string",
+            "description": "サイズ"
+          },
+          "size_code": {
+            "type": "string",
+            "description": "サイズコード"
+          },
+          "temperature_control": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TemperatureControl"
+              }
+            ],
+            "description": "配送温度"
+          },
+          "width": {
+            "type": "number",
+            "description": "幅"
+          },
+          "height": {
+            "type": "number",
+            "description": "高さ"
+          },
+          "depth": {
+            "type": "number",
+            "description": "奥行き"
+          },
+          "weight": {
+            "type": "number",
+            "description": "重さ"
+          },
+          "attr1": {
+            "type": "string",
+            "description": "フリー項目1"
+          },
+          "attr2": {
+            "type": "string",
+            "description": "フリー項目2"
+          },
+          "attr3": {
+            "type": "string",
+            "description": "フリー項目3"
+          },
+          "attr4": {
+            "type": "string",
+            "description": "フリー項目4"
+          },
+          "attr5": {
+            "type": "string",
+            "description": "フリー項目5"
+          },
+          "attr6": {
+            "type": "string",
+            "description": "フリー項目6"
+          },
+          "attr7": {
+            "type": "string",
+            "description": "フリー項目7"
+          },
+          "attr8": {
+            "type": "string",
+            "description": "フリー項目8"
+          },
+          "attr9": {
+            "type": "string",
+            "description": "フリー項目9"
+          },
+          "attr10": {
+            "type": "string",
+            "description": "フリー項目10"
+          },
+          "attr11": {
+            "type": "string",
+            "description": "フリー項目11"
+          },
+          "attr12": {
+            "type": "string",
+            "description": "フリー項目12"
+          },
+          "attr13": {
+            "type": "string",
+            "description": "フリー項目13"
+          },
+          "attr14": {
+            "type": "string",
+            "description": "フリー項目14"
+          },
+          "attr15": {
+            "type": "string",
+            "description": "フリー項目15"
+          },
+          "attr16": {
+            "type": "string",
+            "description": "フリー項目16"
+          },
+          "attr17": {
+            "type": "string",
+            "description": "フリー項目17"
+          },
+          "attr18": {
+            "type": "string",
+            "description": "フリー項目18"
+          },
+          "attr19": {
+            "type": "string",
+            "description": "フリー項目19"
+          },
+          "attr20": {
+            "type": "string",
+            "description": "フリー項目20"
+          },
+          "comment": {
+            "type": "string",
+            "description": "備考欄"
+          },
+          "unit": {
+            "type": "string",
+            "description": "数量単位"
+          },
+          "delivery_category": {
+            "type": "string",
+            "description": "配送カテゴリ"
+          },
+          "default_delivery_method": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DeliveryMethod"
+              }
+            ],
+            "description": "デフォルトの配送方法"
+          },
+          "size_coefficient": {
+            "type": "number",
+            "description": "サイズ係数"
+          },
+          "release_date": {
+            "type": "string",
+            "description": "発売日 - Y-m-d形式 (例 : 2018-01-01)"
+          },
+          "contents_description": {
+            "type": "string",
+            "description": "内容品欄"
+          },
+          "label_text": {
+            "type": "string",
+            "description": "ラベルテキスト"
+          },
+          "limiting_sales": {
+            "type": "integer",
+            "description": "販売制限数"
+          },
+          "reorder_point": {
+            "type": "integer",
+            "description": "発注点"
+          },
+          "tags": {
+            "type": "array",
+            "description": "タグ(配列)",
+            "items": {
+              "type": "string"
+            }
+          },
+          "supplier_code": {
+            "type": "string",
+            "description": "[登録時のみ] 仕入先コード"
+          },
+          "components": {
+            "type": "array",
+            "description": "構成商品 - component の配列",
+            "items": {
+              "$ref": "#/components/schemas/Component"
+            }
+          }
+        }
+      },
+      "Article": {
+        "type": "object",
+        "description": "商品マスタ。レスポンスデータには値が設定されている項目についてのみ返却します。",
+        "required": [
+          "name",
+          "article_type"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "[読取専用] ID商品マスタをユニークに識別するための数値です。主に、APIでのアクセスに使用します。商品コードとは異なります。"
+          },
+          "code": {
+            "type": "string",
+            "description": "商品コード"
+          },
+          "identification_code": {
+            "type": "string",
+            "description": "識別コード"
+          },
+          "object_code": {
+            "type": "string",
+            "description": "ロジレスコード"
+          },
+          "model_number": {
+            "type": "string",
+            "description": "型番"
+          },
+          "name": {
+            "type": "string",
+            "description": "[必須] 商品名"
+          },
+          "name_kana": {
+            "type": "string",
+            "description": "商品名かな"
+          },
+          "article_type": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ArticleType"
+              }
+            ],
+            "description": "[必須] 商品区分 - デフォルトは Single （APIで登録可能な商品区分は、SingleとAssortmentのみ）",
+            "default": "Single"
+          },
+          "price": {
+            "type": "integer",
+            "description": "価格"
+          },
+          "tax_indicator": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TaxIndicator"
+              }
+            ],
+            "description": "税区分 - デフォルトは Included",
+            "default": "TaxIncluded"
+          },
+          "tax_rate": {
+            "type": "number",
+            "description": "税率 - デフォルトは 8",
+            "default": 8
+          },
+          "list_price": {
+            "type": "integer",
+            "description": "定価"
+          },
+          "cost": {
+            "type": "integer",
+            "description": "原価"
+          },
+          "color": {
+            "type": "string",
+            "description": "カラー"
+          },
+          "color_code": {
+            "type": "string",
+            "description": "カラーコード"
+          },
+          "size": {
+            "type": "string",
+            "description": "サイズ"
+          },
+          "size_code": {
+            "type": "string",
+            "description": "サイズコード"
+          },
+          "temperature_control": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TemperatureControl"
+              }
+            ],
+            "description": "配送温度"
+          },
+          "width": {
+            "type": "number",
+            "description": "幅"
+          },
+          "height": {
+            "type": "number",
+            "description": "高さ"
+          },
+          "depth": {
+            "type": "number",
+            "description": "奥行き"
+          },
+          "weight": {
+            "type": "number",
+            "description": "重さ"
+          },
+          "attr1": {
+            "type": "string",
+            "description": "フリー項目1"
+          },
+          "attr2": {
+            "type": "string",
+            "description": "フリー項目2"
+          },
+          "attr3": {
+            "type": "string",
+            "description": "フリー項目3"
+          },
+          "attr4": {
+            "type": "string",
+            "description": "フリー項目4"
+          },
+          "attr5": {
+            "type": "string",
+            "description": "フリー項目5"
+          },
+          "attr6": {
+            "type": "string",
+            "description": "フリー項目6"
+          },
+          "attr7": {
+            "type": "string",
+            "description": "フリー項目7"
+          },
+          "attr8": {
+            "type": "string",
+            "description": "フリー項目8"
+          },
+          "attr9": {
+            "type": "string",
+            "description": "フリー項目9"
+          },
+          "attr10": {
+            "type": "string",
+            "description": "フリー項目10"
+          },
+          "attr11": {
+            "type": "string",
+            "description": "フリー項目11"
+          },
+          "attr12": {
+            "type": "string",
+            "description": "フリー項目12"
+          },
+          "attr13": {
+            "type": "string",
+            "description": "フリー項目13"
+          },
+          "attr14": {
+            "type": "string",
+            "description": "フリー項目14"
+          },
+          "attr15": {
+            "type": "string",
+            "description": "フリー項目15"
+          },
+          "attr16": {
+            "type": "string",
+            "description": "フリー項目16"
+          },
+          "attr17": {
+            "type": "string",
+            "description": "フリー項目17"
+          },
+          "attr18": {
+            "type": "string",
+            "description": "フリー項目18"
+          },
+          "attr19": {
+            "type": "string",
+            "description": "フリー項目19"
+          },
+          "attr20": {
+            "type": "string",
+            "description": "フリー項目20"
+          },
+          "comment": {
+            "type": "string",
+            "description": "備考欄"
+          },
+          "unit": {
+            "type": "string",
+            "description": "数量単位"
+          },
+          "delivery_category": {
+            "type": "string",
+            "description": "配送カテゴリ"
+          },
+          "default_delivery_method": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DeliveryMethod"
+              }
+            ],
+            "description": "デフォルトの配送方法"
+          },
+          "size_coefficient": {
+            "type": "number",
+            "description": "サイズ係数"
+          },
+          "release_date": {
+            "type": "string",
+            "description": "発売日 - Y-m-d形式 (例 : 2018-01-01)"
+          },
+          "contents_description": {
+            "type": "string",
+            "description": "内容品欄"
+          },
+          "label_text": {
+            "type": "string",
+            "description": "ラベルテキスト"
+          },
+          "limiting_sales": {
+            "type": "integer",
+            "description": "販売制限数"
+          },
+          "reorder_point": {
+            "type": "integer",
+            "description": "発注点"
+          },
+          "tags": {
+            "type": "array",
+            "description": "タグ(配列)",
+            "items": {
+              "type": "string"
+            }
+          },
+          "supplier_code": {
+            "type": "string",
+            "description": "[登録時のみ] 仕入先コード"
+          },
+          "created_at": {
+            "type": "string",
+            "readOnly": true,
+            "description": "[読取専用] 登録日時 - Y-m-d H:i:s形式 (例 : 2018-01-01 23:59:59)"
+          },
+          "updated_at": {
+            "type": "string",
+            "readOnly": true,
+            "description": "[読取専用] 更新日時 - Y-m-d H:i:s形式 (例 : 2018-01-01 23:59:59)"
+          },
+          "supplier": {
+            "type": "object",
+            "readOnly": true,
+            "description": "[読取専用] 仕入先マスタ - supplier のプロパティを参照"
+          },
+          "components": {
+            "type": "array",
+            "description": "構成商品 - component の配列",
+            "items": {
+              "$ref": "#/components/schemas/Component"
+            }
+          }
+        }
+      }
+    }
+  }
+}

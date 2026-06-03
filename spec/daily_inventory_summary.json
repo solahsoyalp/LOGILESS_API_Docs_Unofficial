@@ -1,0 +1,253 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "LOGILESS API - 日次在庫表",
+    "version": "2026.06.04",
+    "description": "非公式。LOGILESS API の日次在庫表系。最終確認日: 2026-06-04。公式: https://app2.logiless.com/developer/"
+  },
+  "servers": [
+    {
+      "url": "https://app2.logiless.com/api/v1/merchant/{merchant_id}",
+      "variables": {
+        "merchant_id": {
+          "default": "your-merchant-id",
+          "description": "マーチャントID"
+        }
+      }
+    }
+  ],
+  "security": [
+    {
+      "OAuth2": []
+    }
+  ],
+  "paths": {
+    "/daily_inventory_summaries": {
+      "get": {
+        "summary": "在庫の一覧を取得",
+        "operationId": "listDailyInventorySummaries",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "description": "日付 - Y-m-d形式 (例 : 2018-01-01)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "article_code",
+            "in": "query",
+            "description": "商品コード",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "取得する結果の数 - デフォルトは 20 最大値は 100",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 20,
+              "maximum": 100
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "ページ - デフォルトは 1",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "name": "warehouse",
+            "in": "query",
+            "description": "倉庫ID",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "日次在庫表の一覧",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DailyInventorySummaryList"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "OAuth2": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://app2.logiless.com/oauth/v2/auth",
+            "tokenUrl": "https://app2.logiless.com/oauth2/token",
+            "scopes": {}
+          }
+        }
+      }
+    },
+    "schemas": {
+      "DailyInventorySummary": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID。在庫情報をユニークに識別するための数値です。主に、APIでのアクセスに使用します。"
+          },
+          "date": {
+            "type": "string",
+            "description": "日付 - Y-m-d形式 (例 : 2018-01-01)"
+          },
+          "layer": {
+            "type": "string",
+            "description": "在庫レイヤー",
+            "enum": [
+              "Article",
+              "Warehouse",
+              "Location",
+              "Deadline",
+              "LotNumber"
+            ]
+          },
+          "received": {
+            "type": "integer",
+            "description": "入庫待ち"
+          },
+          "available": {
+            "type": "integer",
+            "description": "保管中"
+          },
+          "blocked": {
+            "type": "integer",
+            "description": "保留"
+          },
+          "allocated": {
+            "type": "integer",
+            "description": "ピッキング中"
+          },
+          "created_at": {
+            "type": "string",
+            "description": "作成日時 - Y-m-d H:i:s形式 (例 : 2018-01-01 23:59:59)"
+          },
+          "updated_at": {
+            "type": "string",
+            "description": "更新日時 - Y-m-d H:i:s形式 (例 : 2018-01-01 23:59:59)"
+          },
+          "article": {
+            "description": "商品マスタ",
+            "$ref": "#/components/schemas/Article"
+          },
+          "warehouse": {
+            "description": "倉庫",
+            "$ref": "#/components/schemas/Warehouse"
+          }
+        }
+      },
+      "Article": {
+        "type": "object",
+        "description": "商品マスタ",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID"
+          },
+          "code": {
+            "type": "string",
+            "description": "商品コード"
+          },
+          "object_code": {
+            "type": "string",
+            "description": "オブジェクトコード"
+          },
+          "name": {
+            "type": "string",
+            "description": "商品名"
+          },
+          "article_type": {
+            "type": "string",
+            "description": "商品タイプ"
+          },
+          "tax_indicator": {
+            "type": "string",
+            "description": "税区分"
+          },
+          "temperature_control": {
+            "type": "string",
+            "description": "温度管理区分"
+          },
+          "unit": {
+            "type": "string",
+            "description": "単位"
+          },
+          "limiting_sales": {
+            "type": "integer",
+            "description": "販売制限"
+          },
+          "created_at": {
+            "type": "string",
+            "description": "作成日時 - Y-m-d H:i:s形式 (例 : 2018-01-01 23:59:59)"
+          },
+          "updated_at": {
+            "type": "string",
+            "description": "更新日時 - Y-m-d H:i:s形式 (例 : 2018-01-01 23:59:59)"
+          }
+        }
+      },
+      "Warehouse": {
+        "type": "object",
+        "description": "倉庫",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID"
+          },
+          "name": {
+            "type": "string",
+            "description": "倉庫名"
+          }
+        }
+      },
+      "DailyInventorySummaryList": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DailyInventorySummary"
+            }
+          },
+          "current_page": {
+            "type": "integer",
+            "description": "現在のページ"
+          },
+          "limit": {
+            "type": "integer",
+            "description": "取得する結果の数"
+          },
+          "total_count": {
+            "type": "integer",
+            "description": "総件数"
+          }
+        }
+      }
+    }
+  }
+}

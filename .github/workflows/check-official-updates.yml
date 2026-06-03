@@ -1,0 +1,100 @@
+name: Check Official Updates
+
+# 公式開発者ドキュメント (https://app2.logiless.com/developer/) のドキュメント一覧を
+# 定期的に確認し、当リポジトリが把握していない新しいドキュメント（インターフェース・列挙型など）が
+# 出現したら、確認用 Issue を作成します。
+#
+# LOGILESS の公式ドキュメントには更新日付の一覧が無いため、Re:lation 版のような「日付 diff」ではなく
+# 「ドキュメント一覧（スラッグ）の diff」方式で新規追加を検知します。
+
+on:
+  schedule:
+    # 毎週月曜 00:00 UTC（= 月曜 09:00 JST）
+    - cron: "0 0 * * 1"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Detect new documents
+        id: detect
+        run: |
+          set -euo pipefail
+
+          # 既知のドキュメント一覧（コメント行・空行を除去して整形）
+          grep -vE '^\s*(#|$)' .github/known-documents.txt | sed 's/[[:space:]]//g' | sort -u > known.txt
+
+          # 公式ページから /developer/documents/<slug> を抽出し、<slug> 部分のみ正規化
+          PAGE="$(curl -fsSL https://app2.logiless.com/developer/ || true)"
+          if [ -z "$PAGE" ]; then
+            echo "公式ページを取得できませんでした。スキップします。"
+            echo "new=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          printf '%s' "$PAGE" \
+            | grep -oE '/developer/documents/[a-z0-9_]+(/[a-z0-9_]+)?' \
+            | sed -E 's#^/developer/documents/##' \
+            | sort -u > found.txt
+
+          # 公式に存在するが known.txt に無いもの（= 新規候補）
+          comm -23 found.txt known.txt > new.txt || true
+
+          if [ -s new.txt ]; then
+            echo "new=true" >> "$GITHUB_OUTPUT"
+            {
+              echo "list<<EOF"
+              cat new.txt
+              echo "EOF"
+            } >> "$GITHUB_OUTPUT"
+          else
+            echo "new=false" >> "$GITHUB_OUTPUT"
+            echo "新規ドキュメントは検知されませんでした。"
+          fi
+
+      - name: Open issue if new documents exist
+        if: steps.detect.outputs.new == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NEWLIST: ${{ steps.detect.outputs.list }}
+        run: |
+          set -euo pipefail
+
+          # 同一タイトルの Open Issue があれば重複作成しない（検知集合をハッシュ化）
+          HASH="$(printf '%s' "$NEWLIST" | sort | md5sum | cut -c1-8)"
+          TITLE="[自動検知] 公式ドキュメントに未反映のページがあります ($HASH)"
+
+          EXISTING="$(gh issue list --state open --search "$HASH in:title" --json number --jq 'length')"
+          if [ "$EXISTING" != "0" ]; then
+            echo "既存の Issue があるためスキップします。"
+            exit 0
+          fi
+
+          BULLETS="$(printf '%s\n' "$NEWLIST" | sed 's#^#- https://app2.logiless.com/developer/documents/#')"
+
+          BODY="$(printf '%s\n' \
+            "公式開発者ドキュメント一覧に、当リポジトリ未把握のドキュメントが検知されました。" \
+            "" \
+            "## 新規候補" \
+            "$BULLETS" \
+            "" \
+            "## 対応手順" \
+            "1. 上記ページの内容を確認する。" \
+            "2. 該当する spec/*.json と docs/ 配下の Markdown を追加・更新する。" \
+            "3. README.md の APIリスト・エンドポイント早見表・更新履歴・最終確認日を更新する。" \
+            "4. .github/known-documents.txt に上記スラッグを追記する。" \
+            "" \
+            "> この Issue は GitHub Actions により自動作成されました。誤検知の場合は .github/known-documents.txt を調整してください。")"
+
+          gh issue create \
+            --title "$TITLE" \
+            --label documentation \
+            --body "$BODY"

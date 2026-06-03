@@ -1,0 +1,50 @@
+# LOGILESS Developers 公式ドキュメント (https://app2.logiless.com/developer/) で
+# 当リポジトリが把握している既知のドキュメント一覧。
+# /developer/documents/ より後ろのパス（スラッグ）を 1 行に 1 つ記載する。
+# GitHub Actions (.github/workflows/check-official-updates.yml) が公式ページと比較し、
+# ここに無いドキュメントが公式に出現したら確認用 Issue を自動作成する。
+# 公式更新を反映したら、本ファイルも更新すること。
+# 空行と # で始まる行は無視される。
+
+# 概要
+specifications
+authentication
+errors
+
+# インターフェース
+interface/sales_order
+interface/sales_return
+interface/outbound_delivery
+interface/inbound_delivery
+interface/inter_warehouse_transfer
+interface/article
+interface/article_map
+interface/supplier
+interface/logical_inventory_summary
+interface/actual_inventory_summary
+interface/daily_inventory_summary
+interface/transaction_log
+interface/reorder_point
+interface/store
+interface/warehouse
+interface/location
+
+# 列挙型
+type/document_status
+type/allocation_status
+type/delivery_status
+type/incoming_payment_status
+type/authorization_status
+type/document_line_status
+type/delivery_method
+type/payment_method
+type/express_type
+type/temperature_control
+type/tax_indicator
+type/tax_processing_method
+type/tax_rounding_method
+type/article_type
+type/inbound_delivery_status
+type/inbound_delivery_category
+type/transaction_type
+type/inventory_summary_layer

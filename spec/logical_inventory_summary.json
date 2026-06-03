@@ -1,0 +1,539 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "LOGILESS API - 在庫（論理在庫サマリ）",
+    "version": "2026.06.04",
+    "description": "非公式。LOGILESS API の在庫（論理在庫サマリ）系。最終確認日: 2026-06-04。公式: https://app2.logiless.com/developer/"
+  },
+  "servers": [
+    {
+      "url": "https://app2.logiless.com/api/v1/merchant/{merchant_id}",
+      "variables": {
+        "merchant_id": {
+          "default": "your-merchant-id",
+          "description": "マーチャントID"
+        }
+      }
+    }
+  ],
+  "security": [
+    {
+      "OAuth2": []
+    }
+  ],
+  "paths": {
+    "/logical_inventory_summaries": {
+      "get": {
+        "summary": "在庫の一覧を取得",
+        "operationId": "listLogicalInventorySummaries",
+        "description": "article_code, identification_codeは単一指定のみリクエストが可能です。複数指定されたい場合やmodel_numbers(型番)を指定されたい場合は在庫の検索をご利用ください。",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "取得する結果の数 - デフォルトは 20 最大値は 100",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 20,
+              "maximum": 100
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "ページ - デフォルトは 1",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "name": "article_code",
+            "in": "query",
+            "description": "商品コード",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "identification_code",
+            "in": "query",
+            "description": "識別コード",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "layer",
+            "in": "query",
+            "description": "在庫レイヤー - デフォルトは Article",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/InventorySummaryLayer"
+            }
+          },
+          {
+            "name": "article_type",
+            "in": "query",
+            "description": "商品区分 - デフォルトは Single",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/ArticleType"
+            }
+          },
+          {
+            "name": "min_in_transit",
+            "in": "query",
+            "description": "入荷待ち（最小）",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "max_in_transit",
+            "in": "query",
+            "description": "入荷待ち（最大）",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "min_received",
+            "in": "query",
+            "description": "入庫待ち（最小）",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "max_received",
+            "in": "query",
+            "description": "入庫待ち（最大）",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "min_blocked",
+            "in": "query",
+            "description": "保留（最小）",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "max_blocked",
+            "in": "query",
+            "description": "保留（最大）",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "min_free",
+            "in": "query",
+            "description": "フリー在庫（最小）",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "max_free",
+            "in": "query",
+            "description": "フリー在庫（最大）",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "min_allocated",
+            "in": "query",
+            "description": "引当済み（最小）",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "max_allocated",
+            "in": "query",
+            "description": "引当済み（最大）",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "min_stock_out",
+            "in": "query",
+            "description": "引当待ち（最小）",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "max_stock_out",
+            "in": "query",
+            "description": "引当待ち（最大）",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "min_shipped",
+            "in": "query",
+            "description": "出荷済み（最小）",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "max_shipped",
+            "in": "query",
+            "description": "出荷済み（最大）",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "is_reorder_level",
+            "in": "query",
+            "description": "発注点割れかどうか",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "updated_at_from",
+            "in": "query",
+            "description": "更新日時（From） - Y-m-d H:i:s形式 (例 : 2018-01-01 23:59:59)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "updated_at_to",
+            "in": "query",
+            "description": "更新日時（To） - Y-m-d H:i:s形式 (例 : 2018-01-01 23:59:59)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "warehouse",
+            "in": "query",
+            "description": "倉庫ID",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "ean_code",
+            "in": "query",
+            "description": "識別コード（廃止予定 : identification_codeを使用してください）",
+            "required": false,
+            "deprecated": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LogicalInventorySummaryListResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/logical_inventory_summaries/search": {
+      "post": {
+        "summary": "在庫の検索",
+        "operationId": "searchLogicalInventorySummaries",
+        "description": "複数の識別子(article_codes, identification_codes, model_numbers)をもとに在庫の一覧取得を行います。article_codes, identification_codes, model_numbers いずれかの指定が必須となります。",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LogicalInventorySummarySearchRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LogicalInventorySummarySearchResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "OAuth2": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://app2.logiless.com/oauth/v2/auth",
+            "tokenUrl": "https://app2.logiless.com/oauth2/token",
+            "scopes": {}
+          }
+        }
+      }
+    },
+    "schemas": {
+      "InventorySummaryLayer": {
+        "type": "string",
+        "description": "在庫レイヤー",
+        "enum": [
+          "Article",
+          "Warehouse",
+          "Location",
+          "Deadline",
+          "LotNumber"
+        ]
+      },
+      "ArticleType": {
+        "type": "string",
+        "description": "商品区分",
+        "enum": [
+          "Single",
+          "Assortment",
+          "Crate"
+        ]
+      },
+      "Article": {
+        "type": "object",
+        "description": "商品マスタ",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "code": {
+            "type": "string"
+          },
+          "object_code": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "article_type": {
+            "$ref": "#/components/schemas/ArticleType"
+          },
+          "tax_indicator": {
+            "type": "string"
+          },
+          "temperature_control": {
+            "type": "string"
+          },
+          "unit": {
+            "type": "string"
+          },
+          "limiting_sales": {
+            "type": "integer"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          }
+        }
+      },
+      "Warehouse": {
+        "type": "object",
+        "description": "倉庫",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "LogicalInventorySummary": {
+        "type": "object",
+        "description": "在庫（論理在庫サマリ）",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID在庫情報をユニークに識別するための数値です。主に、APIでのアクセスに使用します。"
+          },
+          "layer": {
+            "$ref": "#/components/schemas/InventorySummaryLayer"
+          },
+          "ordered": {
+            "type": "integer",
+            "description": "受注済み"
+          },
+          "in_transit": {
+            "type": "integer",
+            "description": "入荷待ち"
+          },
+          "received": {
+            "type": "integer",
+            "description": "入庫待ち"
+          },
+          "available": {
+            "type": "integer",
+            "description": "保管中"
+          },
+          "blocked": {
+            "type": "integer",
+            "description": "保留"
+          },
+          "allocated": {
+            "type": "integer",
+            "description": "引当済み"
+          },
+          "stock_out": {
+            "type": "integer",
+            "description": "引当待ち"
+          },
+          "free": {
+            "type": "integer",
+            "description": "フリー在庫"
+          },
+          "shipped": {
+            "type": "integer",
+            "description": "出荷済み"
+          },
+          "issued": {
+            "type": "integer",
+            "description": "出庫済み"
+          },
+          "is_reorder_level": {
+            "type": "integer",
+            "description": "発注点割れ"
+          },
+          "reached_reorder_level_at": {
+            "type": "string",
+            "description": "発注点を割った日時 - Y-m-d H:i:s形式 (例 : 2018-01-01 23:59:59)"
+          },
+          "created_at": {
+            "type": "string",
+            "description": "作成日時 - Y-m-d H:i:s形式 (例 : 2018-01-01 23:59:59)"
+          },
+          "updated_at": {
+            "type": "string",
+            "description": "更新日時 - Y-m-d H:i:s形式 (例 : 2018-01-01 23:59:59)"
+          },
+          "article": {
+            "$ref": "#/components/schemas/Article"
+          },
+          "warehouse": {
+            "$ref": "#/components/schemas/Warehouse"
+          },
+          "article_id": {
+            "type": "integer",
+            "description": "（非推奨）商品マスタID",
+            "deprecated": true
+          },
+          "warehouse_id": {
+            "type": "integer",
+            "description": "（非推奨）倉庫ID",
+            "deprecated": true
+          }
+        }
+      },
+      "LogicalInventorySummaryListResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LogicalInventorySummary"
+            }
+          },
+          "current_page": {
+            "type": "integer"
+          },
+          "limit": {
+            "type": "integer"
+          },
+          "total_count": {
+            "type": "integer"
+          }
+        }
+      },
+      "LogicalInventorySummarySearchResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LogicalInventorySummary"
+            }
+          }
+        }
+      },
+      "LogicalInventorySummarySearchRequest": {
+        "type": "object",
+        "description": "article_codes, identification_codes, model_numbers いずれかの指定が必須となります。",
+        "properties": {
+          "article_codes": {
+            "type": "array",
+            "description": "商品コード - 最大100件まで指定可能",
+            "items": {
+              "type": "string"
+            }
+          },
+          "identification_codes": {
+            "type": "array",
+            "description": "識別コード - 最大100件まで指定可能",
+            "items": {
+              "type": "string"
+            }
+          },
+          "model_numbers": {
+            "type": "array",
+            "description": "型番 - 最大100件まで指定可能",
+            "items": {
+              "type": "string"
+            }
+          },
+          "warehouse_id": {
+            "type": "integer",
+            "description": "倉庫ID"
+          }
+        }
+      }
+    }
+  }
+}

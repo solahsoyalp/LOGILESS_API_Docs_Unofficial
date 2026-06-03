@@ -1,0 +1,303 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "LOGILESS API - 商品対応表",
+    "version": "2026.06.04",
+    "description": "非公式。LOGILESS API の商品対応表系。最終確認日: 2026-06-04。公式: https://app2.logiless.com/developer/"
+  },
+  "servers": [
+    {
+      "url": "https://app2.logiless.com/api/v1/merchant/{merchant_id}",
+      "variables": {
+        "merchant_id": {
+          "default": "your-merchant-id",
+          "description": "マーチャントID"
+        }
+      }
+    }
+  ],
+  "security": [
+    {
+      "OAuth2": []
+    }
+  ],
+  "paths": {
+    "/article_maps": {
+      "get": {
+        "summary": "商品対応表の一覧を取得",
+        "operationId": "getArticleMaps",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "取得する結果の数 - デフォルトは 20 最大値は 100",
+            "schema": {
+              "type": "integer",
+              "default": 20,
+              "maximum": 100
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "ページ - デフォルトは 1",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "name": "store",
+            "in": "query",
+            "description": "店舗",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "article_code",
+            "in": "query",
+            "description": "商品コード",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "is_automatic_inventory_sync_enables",
+            "in": "query",
+            "description": "自動在庫連携が有効かどうか - 有効な場合: 1、有効でない場合: 0",
+            "schema": {
+              "type": "integer",
+              "enum": [0, 1]
+            }
+          },
+          {
+            "name": "has_error",
+            "in": "query",
+            "description": "最後の在庫連携時にエラーがあったかどうか - エラーがある場合: 1、エラーがない場合: 0",
+            "schema": {
+              "type": "integer",
+              "enum": [0, 1]
+            }
+          },
+          {
+            "name": "updated_at_from",
+            "in": "query",
+            "description": "更新日時（From） - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "updated_at_to",
+            "in": "query",
+            "description": "更新日時（To） - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "商品対応表の一覧",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArticleMapListResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "OAuth2": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://app2.logiless.com/oauth/v2/auth",
+            "tokenUrl": "https://app2.logiless.com/oauth2/token",
+            "scopes": {}
+          }
+        }
+      }
+    },
+    "schemas": {
+      "ArticleMap": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "[読取専用] ID商品対応表をユニークに識別するための数値です。主に、APIでのアクセスに使用します。商品コードとは異なります。"
+          },
+          "mapped_code": {
+            "type": "string",
+            "description": "マップされた商品コード"
+          },
+          "mapped_choice1": {
+            "type": "string",
+            "description": "マップされた選択肢1"
+          },
+          "mapped_choice2": {
+            "type": "string",
+            "description": "マップされた選択肢2"
+          },
+          "mapped_choice3": {
+            "type": "string",
+            "description": "マップされた選択肢3"
+          },
+          "attr1": {
+            "type": "string",
+            "description": "フリー項目1"
+          },
+          "article_option": {
+            "type": "string",
+            "description": "明細行備考欄"
+          },
+          "cached_stock_quantity": {
+            "type": "integer",
+            "description": "キャッシュされた在庫数"
+          },
+          "standby_stock_quantity": {
+            "type": "integer",
+            "description": "予備在庫数"
+          },
+          "stock_allocation_rate": {
+            "type": "number",
+            "description": "在庫割当率"
+          },
+          "max_stock_quantity": {
+            "type": "integer",
+            "description": "上限在庫数"
+          },
+          "min_stock_quantity": {
+            "type": "integer",
+            "description": "下限在庫数"
+          },
+          "available_stock_quantity": {
+            "type": "integer",
+            "description": "キャッシュされた在庫数から計算された販売可能在庫数"
+          },
+          "is_inventory_synced": {
+            "type": "boolean",
+            "description": "在庫連携されたかどうか - 連携されている場合: 1、連携されていない場合: 0"
+          },
+          "is_automatic_inventory_sync_enables": {
+            "type": "boolean",
+            "description": "自動在庫連携が有効かどうか - 有効な場合: 1、有効でない場合: 0"
+          },
+          "created_at": {
+            "type": "string",
+            "readOnly": true,
+            "description": "[読取専用] 登録日時 - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`)"
+          },
+          "updated_at": {
+            "type": "string",
+            "readOnly": true,
+            "description": "[読取専用] 更新日時 - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`)"
+          },
+          "article": {
+            "$ref": "#/components/schemas/Article"
+          },
+          "store": {
+            "$ref": "#/components/schemas/Store"
+          }
+        }
+      },
+      "Article": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID商品情報をユニークに識別するための数値です。"
+          },
+          "code": {
+            "type": "string",
+            "description": "商品コード"
+          },
+          "object_code": {
+            "type": "string",
+            "description": "ロジレスコード"
+          },
+          "name": {
+            "type": "string",
+            "description": "商品名"
+          },
+          "article_type": {
+            "type": "string",
+            "description": "商品区分 - デフォルトは `Single`",
+            "enum": ["Single", "Assortment", "Crate"]
+          },
+          "tax_indicator": {
+            "type": "string",
+            "description": "税区分 - デフォルトは `Included`",
+            "enum": ["TaxExcluded", "TaxIncluded", "Exempt"]
+          },
+          "temperature_control": {
+            "type": "string",
+            "description": "配送温度",
+            "enum": ["Normal", "Cold", "Frozen"]
+          },
+          "unit": {
+            "type": "string",
+            "description": "数量単位"
+          },
+          "limiting_sales": {
+            "type": "integer",
+            "description": "販売制限数"
+          },
+          "created_at": {
+            "type": "string",
+            "readOnly": true,
+            "description": "[読取専用] 商品登録日時 - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`)"
+          },
+          "updated_at": {
+            "type": "string",
+            "readOnly": true,
+            "description": "[読取専用] 商品更新日時 - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`)"
+          }
+        }
+      },
+      "Store": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID店舗情報をユニークに識別するための数値です。"
+          },
+          "name": {
+            "type": "string",
+            "description": "店舗名"
+          }
+        }
+      },
+      "ArticleMapListResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ArticleMap"
+            }
+          },
+          "current_page": {
+            "type": "integer",
+            "description": "現在のページ"
+          },
+          "limit": {
+            "type": "integer",
+            "description": "取得する結果の数"
+          },
+          "total_count": {
+            "type": "integer",
+            "description": "総件数"
+          }
+        }
+      }
+    }
+  }
+}

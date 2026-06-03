@@ -1,0 +1,755 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "LOGILESS API - 出荷伝票",
+    "version": "2026.06.04",
+    "description": "非公式。LOGILESS API の出荷伝票系。最終確認日: 2026-06-04。公式: https://app2.logiless.com/developer/"
+  },
+  "servers": [
+    {
+      "url": "https://app2.logiless.com/api/v1/merchant/{merchant_id}",
+      "variables": {
+        "merchant_id": {
+          "default": "your-merchant-id",
+          "description": "マーチャントID"
+        }
+      }
+    }
+  ],
+  "security": [
+    {
+      "OAuth2": []
+    }
+  ],
+  "paths": {
+    "/outbound_deliveries": {
+      "get": {
+        "summary": "出荷伝票の一覧を取得",
+        "operationId": "listOutboundDeliveries",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "取得する結果の数 - デフォルトは 20 最大値は 100",
+            "schema": {
+              "type": "integer",
+              "default": 20,
+              "maximum": 100
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "ページ - デフォルトは 1",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "description": "ID",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "object_code",
+            "in": "query",
+            "description": "出荷管理番号",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "document_status",
+            "in": "query",
+            "description": "伝票ステータス - 複数指定する場合はカンマ区切り",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "delivery_status",
+            "in": "query",
+            "description": "配送ステータス - 複数指定する場合はカンマ区切り",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ordered_at_from",
+            "in": "query",
+            "description": "注文日時（From） - Y-m-d H:i:s形式 (例 : 2018-01-01 23:59:59)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ordered_at_to",
+            "in": "query",
+            "description": "注文日時（To） - Y-m-d H:i:s形式 (例 : 2018-01-01 23:59:59)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "finished_at_from",
+            "in": "query",
+            "description": "完了日時（From） - Y-m-d H:i:s形式 (例 : 2018-01-01 23:59:59)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "finished_at_to",
+            "in": "query",
+            "description": "完了日時（To） - Y-m-d H:i:s形式 (例 : 2018-01-01 23:59:59)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "updated_at_from",
+            "in": "query",
+            "description": "更新日時（From） - Y-m-d H:i:s形式 (例 : 2018-01-01 23:59:59)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "updated_at_to",
+            "in": "query",
+            "description": "更新日時（To） - Y-m-d H:i:s形式 (例 : 2018-01-01 23:59:59)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "warehouse",
+            "in": "query",
+            "description": "倉庫 - 倉庫ID",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "store",
+            "in": "query",
+            "description": "店舗 - 店舗ID",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "scheduled_shipping_date_from",
+            "in": "query",
+            "description": "出荷予定日（From） - Y-m-d形式 (例 : 2018-01-01)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "scheduled_shipping_date_to",
+            "in": "query",
+            "description": "出荷予定日（To） - Y-m-d形式 (例 : 2018-01-10)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "出荷伝票の一覧",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OutboundDelivery"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "OAuth2": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://app2.logiless.com/oauth/v2/auth",
+            "tokenUrl": "https://app2.logiless.com/oauth2/token",
+            "scopes": {}
+          }
+        }
+      }
+    },
+    "schemas": {
+      "OutboundDelivery": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "ID 出荷伝票をユニークに識別するための数値です。主に、APIでのアクセスに使用します。出荷管理番号とは異なります。"
+          },
+          "code": {
+            "type": "string",
+            "description": "出荷管理番号"
+          },
+          "document_status": {
+            "type": "string",
+            "description": "伝票ステータス - 複数指定する場合はカンマ区切り",
+            "enum": [
+              "Processing",
+              "WaitingForPayment",
+              "WaitingForAllocation",
+              "WaitingForShipment",
+              "Shipped",
+              "Cancel"
+            ]
+          },
+          "allocation_status": {
+            "type": "string",
+            "description": "引当ステータス",
+            "enum": [
+              "WaitingForAllocation",
+              "Allocated"
+            ]
+          },
+          "delivery_status": {
+            "type": "string",
+            "description": "配送ステータス - 複数指定する場合はカンマ区切り",
+            "enum": [
+              "WaitingForShipment",
+              "Working",
+              "PartlyShipped",
+              "Shipped",
+              "Pending",
+              "Cancel"
+            ]
+          },
+          "shipper_name1": {
+            "type": "string",
+            "description": "荷送人名(1)"
+          },
+          "shipper_name2": {
+            "type": "string",
+            "description": "荷送人名(2)"
+          },
+          "shipper_name_kana1": {
+            "type": "string",
+            "description": "荷送人名かな(1)"
+          },
+          "shipper_name_kana2": {
+            "type": "string",
+            "description": "荷送人名かな(2)"
+          },
+          "shipper_country": {
+            "type": "string",
+            "description": "荷送人 国 - デフォルトは JP"
+          },
+          "shipper_post_code": {
+            "type": "string",
+            "description": "荷送人 郵便番号"
+          },
+          "shipper_prefecture": {
+            "type": "string",
+            "description": "荷送人 都道府県"
+          },
+          "shipper_address1": {
+            "type": "string",
+            "description": "荷送人 住所1"
+          },
+          "shipper_address2": {
+            "type": "string",
+            "description": "荷送人 住所2"
+          },
+          "shipper_address3": {
+            "type": "string",
+            "description": "荷送人 住所3"
+          },
+          "shipper_phone": {
+            "type": "string",
+            "description": "荷送人 電話番号"
+          },
+          "recipient_name1": {
+            "type": "string",
+            "description": "お届け先名(1)"
+          },
+          "recipient_name2": {
+            "type": "string",
+            "description": "お届け先名(2)"
+          },
+          "recipient_name_kana1": {
+            "type": "string",
+            "description": "お届け先名かな(1)"
+          },
+          "recipient_name_kana2": {
+            "type": "string",
+            "description": "お届け先名かな(2)"
+          },
+          "recipient_country": {
+            "type": "string",
+            "description": "お届け先 国 - デフォルトは JP"
+          },
+          "recipient_post_code": {
+            "type": "string",
+            "description": "お届け先 郵便番号"
+          },
+          "recipient_prefecture": {
+            "type": "string",
+            "description": "お届け先 都道府県"
+          },
+          "recipient_address1": {
+            "type": "string",
+            "description": "お届け先 住所1"
+          },
+          "recipient_address2": {
+            "type": "string",
+            "description": "お届け先 住所2"
+          },
+          "recipient_address3": {
+            "type": "string",
+            "description": "お届け先 住所3"
+          },
+          "recipient_phone": {
+            "type": "string",
+            "description": "お届け先 電話番号"
+          },
+          "cod_total": {
+            "type": "integer",
+            "description": "代金引換合計金額 - デフォルトは 0"
+          },
+          "delivery_method": {
+            "type": "string",
+            "description": "配送方法",
+            "enum": [
+              "yamato",
+              "yamato_compact",
+              "yamato_nekoposu",
+              "yamato_mail",
+              "yamato_poa",
+              "sagawa",
+              "sagawa_mail",
+              "sagawa_yu_mail",
+              "you_pack",
+              "you_pack_poa",
+              "yu_packet",
+              "yu_packet_1cm",
+              "yu_packet_2cm",
+              "yu_packet_3cm",
+              "yu_mail",
+              "yu_mail_150g",
+              "yu_mail_250g",
+              "yu_mail_500g",
+              "yu_mail_1000g",
+              "letter_pack_plus",
+              "letter_pack_light",
+              "standard_size_mail",
+              "non_standard_size_mail",
+              "click_post",
+              "ems",
+              "international_e_packet",
+              "acceptance_recorded_mail",
+              "small_packing",
+              "seino_express",
+              "seino_mini",
+              "ecohai",
+              "dhl",
+              "fed_ex",
+              "ups",
+              "ecms",
+              "pegasus",
+              "global_e_parcel",
+              "rakuten_express",
+              "rakuten_express_mail",
+              "yamato_rakuten_cvs_receipt",
+              "japan_post_rakuten_cvs_receipt",
+              "japan_post_rakuten_po_receipt",
+              "sagawa_rakuten_cvs_receipt",
+              "yamato_box_charter",
+              "jad",
+              "sbs_sokuhai",
+              "nittsu",
+              "nittsu_express_high_speed",
+              "fukutsu",
+              "tonami",
+              "kinbutsu_rex",
+              "toll_express",
+              "kurume",
+              "sanyo_jidosha",
+              "last_one_mile_personal_delivery",
+              "last_one_mile_business_delivery",
+              "delivery_provider",
+              "in_store_pickup",
+              "in_warehouse_pickup",
+              "manufacturer_direct",
+              "charter"
+            ]
+          },
+          "delivery_package_quantity": {
+            "type": "integer",
+            "description": "梱包数 - デフォルトは 1"
+          },
+          "delivery_temperature_control": {
+            "type": "string",
+            "description": "配送温度 - デフォルトは Normal",
+            "enum": [
+              "Normal",
+              "Cold",
+              "Frozen"
+            ]
+          },
+          "scheduled_shipping_date": {
+            "type": "string",
+            "description": "出荷予定日 - Y-m-d形式 (例 : 2018-01-01)"
+          },
+          "release_date": {
+            "type": "string",
+            "description": "発売日 - Y-m-d形式 (例 : 2018-01-01)"
+          },
+          "delivery_preferred_date": {
+            "type": "string",
+            "description": "お届け希望日 - Y-m-d形式 (例 : 2018-01-01)"
+          },
+          "delivery_preferred_time_zone": {
+            "type": "string",
+            "description": "お届け希望時間帯"
+          },
+          "delivery_tracking_numbers": {
+            "type": "array",
+            "description": "送り状番号の一覧",
+            "items": {
+              "type": "string"
+            }
+          },
+          "picking_notes": {
+            "type": "string",
+            "description": "出荷指示書 特記事項"
+          },
+          "way_bill_notes": {
+            "type": "string",
+            "description": "送り状 特記事項"
+          },
+          "gift": {
+            "type": "boolean",
+            "description": "ギフトかどうか - ギフトの場合は true、ギフトでない場合は false"
+          },
+          "wrapping": {
+            "type": "string",
+            "description": "ラッピング"
+          },
+          "attr1": {
+            "type": "string",
+            "description": "フリー項目1"
+          },
+          "attr2": {
+            "type": "string",
+            "description": "フリー項目2"
+          },
+          "attr3": {
+            "type": "string",
+            "description": "フリー項目3"
+          },
+          "noshi": {
+            "type": "string",
+            "description": "熨斗"
+          },
+          "total_quantity": {
+            "type": "integer",
+            "description": "合計数量"
+          },
+          "total_weight": {
+            "type": "number",
+            "description": "合計重量"
+          },
+          "total_size_coefficient": {
+            "type": "number",
+            "description": "合計サイズ係数"
+          },
+          "waiting_for_confirmation": {
+            "type": "boolean",
+            "description": "確認待ちかどうか - 確認待ちの場合は true、確認待ちでない場合は false"
+          },
+          "lines": {
+            "type": "array",
+            "description": "明細行 - lineの配列",
+            "items": {
+              "$ref": "#/components/schemas/Line"
+            }
+          },
+          "shipped_actual_stocks": {
+            "type": "array",
+            "readOnly": true,
+            "description": "出荷済みの物理在庫 - shipped_actual_stockの配列",
+            "items": {
+              "$ref": "#/components/schemas/ShippedActualStock"
+            }
+          },
+          "warehouse": {
+            "type": "integer",
+            "description": "出荷元倉庫 - 倉庫ID"
+          },
+          "store": {
+            "type": "integer",
+            "description": "店舗 - 店舗ID"
+          },
+          "sales_order": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/SalesOrder"
+              }
+            ],
+            "description": "受注伝票 - sales_orderのプロパティを参照。※同梱された出荷伝票の場合、同梱先となった受注伝票がセットされます。出荷された全ての受注伝票を取得するには、linesエンティティのoriginを参照します。"
+          },
+          "is_combined": {
+            "type": "boolean",
+            "description": "同梱されているかどうか - 同梱されている場合は true、同梱されていない場合は false"
+          },
+          "combined_shipping": {
+            "type": "boolean",
+            "description": "同梱処理中かどうか - 同梱処理中の場合は true、同梱処理中でない場合は false"
+          },
+          "combined_payment_receipts": {
+            "type": "boolean",
+            "description": "領収書を同梱するかどうか - 領収書も同梱する場合は true、領収書を同梱しない場合は false"
+          },
+          "document_date": {
+            "type": "string",
+            "description": "伝票日付 - Y-m-d H:i:s形式 (例 : 2018-01-01 23:59:59)"
+          },
+          "posting_date": {
+            "type": "string",
+            "description": "転記日付 - Y-m-d H:i:s形式 (例 : 2018-01-01 23:59:59)"
+          },
+          "ordered_at": {
+            "type": "string",
+            "description": "更新日時 - Y-m-d H:i:s形式 (例 : 2018-01-01 23:59:59)"
+          },
+          "created_at": {
+            "type": "string",
+            "description": "作成日時 - Y-m-d H:i:s形式 (例 : 2018-01-01 23:59:59)"
+          },
+          "updated_at": {
+            "type": "string",
+            "description": "更新日時 - Y-m-d H:i:s形式 (例 : 2018-01-01 23:59:59)"
+          },
+          "finished_at": {
+            "type": "string",
+            "description": "完了日時 - Y-m-d H:i:s形式 (例 : 2018-01-01 23:59:59)"
+          }
+        }
+      },
+      "Line": {
+        "type": "object",
+        "required": [
+          "article_code",
+          "article_name"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "ID 受注伝票明細行をユニークに識別するための数値です。主に、APIでのアクセスに使用します。"
+          },
+          "code": {
+            "type": "string",
+            "description": "明細行コード"
+          },
+          "status": {
+            "type": "string",
+            "readOnly": true,
+            "description": "明細ステータス",
+            "enum": [
+              "WaitingForTransfer",
+              "WaitingForAllocation",
+              "Allocated",
+              "Shipped",
+              "Cancel"
+            ]
+          },
+          "article_code": {
+            "type": "string",
+            "description": "商品コード"
+          },
+          "article_name": {
+            "type": "string",
+            "description": "商品名"
+          },
+          "article_option": {
+            "type": "string",
+            "description": "明細行備考欄"
+          },
+          "price": {
+            "type": "integer",
+            "description": "価格 - デフォルトは 0"
+          },
+          "quantity": {
+            "type": "integer",
+            "description": "数量"
+          },
+          "tax_indicator": {
+            "type": "string",
+            "description": "税区分 - デフォルトは Included",
+            "enum": [
+              "TaxExcluded",
+              "TaxIncluded",
+              "Exempt"
+            ]
+          },
+          "tax_rate": {
+            "type": "number",
+            "description": "税率 - デフォルトは 8"
+          },
+          "subtotal": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "小計"
+          },
+          "article": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Article"
+              }
+            ],
+            "readOnly": true,
+            "description": "商品マスタ - articleのプロパティを参照"
+          },
+          "origin": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Origin"
+              }
+            ],
+            "readOnly": true,
+            "description": "受注伝票 - originのプロパティを参照"
+          },
+          "cached_allocated_quantity": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "在庫が引き当てられた数量"
+          },
+          "is_child": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "子明細行かどうか - 子明細行の場合は 1 そうでない場合は 0"
+          },
+          "is_parent": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "親明細行かどうか - 親明細行の場合は 1 そうでない場合は 0"
+          },
+          "is_partial_cancel": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "一部キャンセルかどうか キャンセルの場合は 1 そうでない場合は 0"
+          },
+          "tax_total": {
+            "type": "integer",
+            "description": "税の合計"
+          }
+        }
+      },
+      "Origin": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "ID 受注伝票をユニークに識別するための数値です。主に、APIでのアクセスに使用します。受注コードとは異なります。"
+          },
+          "code": {
+            "type": "string",
+            "description": "受注コード"
+          }
+        }
+      },
+      "Article": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "ID 商品マスタをユニークに識別するための数値です。主に、APIでのアクセスに使用します。商品コードとは異なります。"
+          },
+          "code": {
+            "type": "string",
+            "description": "商品コード"
+          },
+          "model_number": {
+            "type": "string",
+            "description": "型番"
+          },
+          "name": {
+            "type": "string",
+            "description": "商品名"
+          },
+          "name_kana": {
+            "type": "string",
+            "description": "商品名かな"
+          },
+          "identification_code": {
+            "type": "string",
+            "description": "識別コード"
+          },
+          "object_code": {
+            "type": "string",
+            "description": "ロジレスコード"
+          }
+        }
+      },
+      "ShippedActualStock": {
+        "type": "object",
+        "required": [
+          "article_code"
+        ],
+        "description": "伝票ステータスが出荷済みで、かつ出荷期限日、またはロット番号が含まれる在庫が引き当てられた場合に利用できます。",
+        "properties": {
+          "article_code": {
+            "type": "string",
+            "description": "商品コード"
+          },
+          "deadline": {
+            "type": "string",
+            "description": "出荷期限日 - Y-m-d形式 (例 : 2018-01-01)"
+          },
+          "lot_number": {
+            "type": "string",
+            "description": "ロット番号"
+          },
+          "quantity": {
+            "type": "integer",
+            "description": "数量"
+          }
+        }
+      },
+      "SalesOrder": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID 受注伝票をユニークに識別するための数値です。主に、APIでのアクセスに使用します。受注コードとは異なります。"
+          },
+          "code": {
+            "type": "string",
+            "description": "受注コード"
+          },
+          "parent_code": {
+            "type": "string",
+            "description": "親受注コード"
+          }
+        }
+      }
+    }
+  }
+}

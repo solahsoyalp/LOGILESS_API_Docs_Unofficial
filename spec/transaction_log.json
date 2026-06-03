@@ -1,0 +1,361 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "LOGILESS API - 在庫操作ログ",
+    "version": "2026.06.04",
+    "description": "非公式。LOGILESS API の在庫操作ログ系。最終確認日: 2026-06-04。公式: https://app2.logiless.com/developer/"
+  },
+  "servers": [
+    {
+      "url": "https://app2.logiless.com/api/v1/merchant/{merchant_id}",
+      "variables": {
+        "merchant_id": {
+          "default": "your-merchant-id",
+          "description": "マーチャントID"
+        }
+      }
+    }
+  ],
+  "security": [
+    {
+      "OAuth2": []
+    }
+  ],
+  "paths": {
+    "/transaction_logs": {
+      "get": {
+        "summary": "在庫操作ログの一覧を取得",
+        "operationId": "listTransactionLogs",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "取得する結果の数 - デフォルトは 20 最大値は 100",
+            "schema": {
+              "type": "integer",
+              "default": 20,
+              "maximum": 100
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "ページ - デフォルトは 1",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "name": "transaction_type",
+            "in": "query",
+            "description": "在庫操作区分。複数を指定する場合は ,（カンマ）区切り",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "article_code",
+            "in": "query",
+            "description": "商品コード",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "warehouse_id",
+            "in": "query",
+            "description": "倉庫ID",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "created_at_from",
+            "in": "query",
+            "description": "操作日時（From） - Y-m-d H:i:s形式 (例 : 2018-01-01 23:59:59)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "created_at_to",
+            "in": "query",
+            "description": "操作日時（To） - Y-m-d H:i:s形式 (例 : 2018-01-01 23:59:59)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/TransactionLog"
+                      }
+                    },
+                    "current_page": {
+                      "type": "integer"
+                    },
+                    "limit": {
+                      "type": "integer"
+                    },
+                    "total_count": {
+                      "type": "integer"
+                    }
+                  }
+                },
+                "example": {
+                  "data": [
+                    {
+                      "id": 1234,
+                      "transaction_type": "Receipt",
+                      "ordered": 0,
+                      "in_transit": 0,
+                      "transferring": 0,
+                      "received": 10,
+                      "allocated": 0,
+                      "available": 0,
+                      "moving": 0,
+                      "blocked": 0,
+                      "issued": 0,
+                      "shipped": 0,
+                      "article_type": "Single",
+                      "multiplier": 1,
+                      "is_force": true,
+                      "created_at": "2018-01-01 00:00:00",
+                      "updated_at": "2018-01-01 00:00:00",
+                      "article": {
+                        "id": 1,
+                        "code": "1-10-16MT-01-01",
+                        "object_code": "2000000000015",
+                        "name": "テスト商品(1)",
+                        "article_type": "Single",
+                        "unit": "個",
+                        "created_at": "2018-01-01 00:00:00",
+                        "updated_at": "2018-01-01 00:00:00"
+                      },
+                      "location_to": {
+                        "id": 113,
+                        "code": "2950000001133",
+                        "name": "001"
+                      },
+                      "logical_article": {
+                        "id": 1,
+                        "code": "1-10-16MT-01-01",
+                        "object_code": "2000000000015",
+                        "name": "テスト商品(1)",
+                        "article_type": "Single",
+                        "unit": "個",
+                        "created_at": "2018-01-01 00:00:00",
+                        "updated_at": "2018-01-01 00:00:00"
+                      },
+                      "warehouse": {
+                        "id": 1,
+                        "name": "自社倉庫"
+                      }
+                    }
+                  ],
+                  "current_page": 1,
+                  "limit": 20,
+                  "total_count": 1
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "OAuth2": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://app2.logiless.com/oauth/v2/auth",
+            "tokenUrl": "https://app2.logiless.com/oauth2/token",
+            "scopes": {}
+          }
+        }
+      }
+    },
+    "schemas": {
+      "TransactionType": {
+        "type": "string",
+        "description": "在庫操作区分。Transfer: 入荷予定, TransferReversal: 入荷予定取消, Receipt: 入荷, ReceiptReversal: 入荷取消, PutAway: 入庫, Allocation: 引当, Moving: 移動, Issue: 出庫, Shipment: 出荷, ShipmentReversal: 出荷取消, PhysicalInventory: 実地棚卸, ReturnDelivery: 返品入荷, Conversion: 変換",
+        "enum": [
+          "Transfer",
+          "TransferReversal",
+          "Receipt",
+          "ReceiptReversal",
+          "PutAway",
+          "Allocation",
+          "Moving",
+          "Issue",
+          "Shipment",
+          "ShipmentReversal",
+          "PhysicalInventory",
+          "ReturnDelivery",
+          "Conversion"
+        ]
+      },
+      "ArticleType": {
+        "type": "string",
+        "description": "商品区分。Single: 通常商品, Assortment: セット商品, Crate: 集合包装",
+        "enum": [
+          "Single",
+          "Assortment",
+          "Crate"
+        ]
+      },
+      "Source": {
+        "type": "object",
+        "description": "処理元伝票",
+        "properties": {
+          "inbound_delivery": {
+            "type": "object",
+            "description": "入荷予定伝票"
+          }
+        }
+      },
+      "TransactionLog": {
+        "type": "object",
+        "description": "在庫操作ログ",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID在庫操作履歴をユニークに識別するための数値です。主に、APIでのアクセスに使用します。"
+          },
+          "transaction_type": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TransactionType"
+              }
+            ],
+            "description": "在庫操作区分"
+          },
+          "ordered": {
+            "type": "integer",
+            "description": "受注数量の増減"
+          },
+          "in_transit": {
+            "type": "integer",
+            "description": "入荷待ち数量の増減"
+          },
+          "transferring": {
+            "type": "integer",
+            "description": "転送中数量の増減"
+          },
+          "received": {
+            "type": "integer",
+            "description": "入庫待ち数量の増減"
+          },
+          "allocated": {
+            "type": "integer",
+            "description": "引当済み数量の増減"
+          },
+          "available": {
+            "type": "integer",
+            "description": "保管中数量の増減"
+          },
+          "moving": {
+            "type": "integer",
+            "description": "移動数量の増減"
+          },
+          "blocked": {
+            "type": "integer",
+            "description": "保留数量の増減"
+          },
+          "issued": {
+            "type": "integer",
+            "description": "出庫数量の増減"
+          },
+          "shipped": {
+            "type": "integer",
+            "description": "出荷数量の増減"
+          },
+          "article_type": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ArticleType"
+              }
+            ],
+            "description": "商品区分"
+          },
+          "multiplier": {
+            "type": "integer",
+            "description": "乗数商品区分がCrateの場合、通常商品ベースに換算する際の乗数です。たとえば、10個入りの集合包装の場合、乗数は10になります。"
+          },
+          "deadline": {
+            "type": "string",
+            "description": "出荷期限日 - Y-m-d形式 (例 : 2018-01-01)"
+          },
+          "lot_number": {
+            "type": "string",
+            "description": "ロット番号"
+          },
+          "is_force": {
+            "type": "boolean",
+            "description": "強制処理かどうか"
+          },
+          "source": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Source"
+              }
+            ],
+            "description": "処理元伝票 - source のプロパティを参照"
+          },
+          "remarks": {
+            "type": "string",
+            "description": "備考"
+          },
+          "logical_available": {
+            "type": "integer",
+            "description": "在庫操作後の保管中数量"
+          },
+          "created_at": {
+            "type": "string",
+            "description": "作成日時 - Y-m-d H:i:s形式 (例 : 2018-01-01 23:59:59)"
+          },
+          "updated_at": {
+            "type": "string",
+            "description": "更新日時 - Y-m-d H:i:s形式 (例 : 2018-01-01 23:59:59)"
+          },
+          "article": {
+            "type": "object",
+            "description": "商品マスタ"
+          },
+          "location_from": {
+            "type": "object",
+            "description": "ロケーション(1)在庫操作区分が、PutAway、Moving、Issue、Shipmentの場合は、移動元ロケーションがセットされます。"
+          },
+          "location_to": {
+            "type": "object",
+            "description": "ロケーション(2)在庫操作区分が、Receipt、PutAway、Moving、ShipmentReversalの場合は、移動先ロケーションがセットされます。"
+          },
+          "logical_article": {
+            "type": "object",
+            "description": "論理商品マスタ商品区分がCrateの場合、構成する通常商品の商品マスタがセットされます。"
+          },
+          "outbound_delivery": {
+            "type": "object",
+            "description": "出荷伝票在庫操作区分がshipmentの場合にセットされます。idとcodeのみが含まれます。"
+          },
+          "warehouse": {
+            "type": "object",
+            "description": "倉庫"
+          }
+        }
+      }
+    }
+  }
+}

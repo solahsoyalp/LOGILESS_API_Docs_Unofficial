@@ -1,0 +1,518 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "LOGILESS API - 倉庫間移動伝票",
+    "version": "2026.06.04",
+    "description": "非公式。LOGILESS API の倉庫間移動伝票系。最終確認日: 2026-06-04。公式: https://app2.logiless.com/developer/"
+  },
+  "servers": [
+    {
+      "url": "https://app2.logiless.com/api/v1/merchant/{merchant_id}",
+      "variables": {
+        "merchant_id": {
+          "default": "your-merchant-id",
+          "description": "マーチャントID"
+        }
+      }
+    }
+  ],
+  "security": [
+    {
+      "OAuth2": []
+    }
+  ],
+  "paths": {
+    "/inter_warehouse_transfers": {
+      "get": {
+        "summary": "倉庫間移動伝票の一覧を取得",
+        "operationId": "listInterWarehouseTransfers",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "取得する結果の数 - デフォルトは 20 最大値は 100",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 20,
+              "maximum": 100
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "ページ - デフォルトは 1",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "name": "document_status",
+            "in": "query",
+            "description": "伝票ステータス - 複数指定する場合はカンマ区切り",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "delivery_status",
+            "in": "query",
+            "description": "配送ステータス - 複数指定する場合はカンマ区切り",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ordered_at_from",
+            "in": "query",
+            "description": "作成日時（From） - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ordered_at_to",
+            "in": "query",
+            "description": "作成日時（To） - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "finished_at_from",
+            "in": "query",
+            "description": "完了日時（From） - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "finished_at_to",
+            "in": "query",
+            "description": "完了日時（To） - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "updated_at_from",
+            "in": "query",
+            "description": "更新日時（From） - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "updated_at_to",
+            "in": "query",
+            "description": "更新日時（To） - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "warehouse",
+            "in": "query",
+            "description": "出荷元倉庫 - 倉庫ID",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "destination",
+            "in": "query",
+            "description": "納品先倉庫 - 倉庫ID",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "倉庫間移動伝票の一覧",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/InterWarehouseTransfer"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/inter_warehouse_transfers/new": {
+      "post": {
+        "summary": "倉庫間移動伝票を登録",
+        "operationId": "createInterWarehouseTransfer",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "inter_warehouse_transfer"
+                ],
+                "properties": {
+                  "inter_warehouse_transfer": {
+                    "$ref": "#/components/schemas/InterWarehouseTransfer"
+                  }
+                }
+              },
+              "example": {
+                "inter_warehouse_transfer": {
+                  "code": "test-20200901-1",
+                  "lines": [
+                    {
+                      "article_code": "article-1",
+                      "article_name": "商品(1)",
+                      "quantity": 1
+                    }
+                  ],
+                  "delivery_method": "sagawa",
+                  "warehouse": 1,
+                  "destination": 2
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "登録された倉庫間移動伝票",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InterWarehouseTransfer"
+                },
+                "example": {
+                  "id": "1234",
+                  "code": "test-20200901-1",
+                  "status": "WaitingForAllocation",
+                  "delivery_status": "WaitingForShipment",
+                  "delivery_method": "sagawa",
+                  "ordered_at": "2020-09-01 00:00:00",
+                  "created_at": "2020-09-01 00:00:00",
+                  "updated_at": "2020-09-01 00:00:00",
+                  "lines": [
+                    {
+                      "id": 8837,
+                      "status": "WaitingForAllocation",
+                      "article_code": "article-1",
+                      "article_name": "商品(1)",
+                      "quantity": "1",
+                      "uses_blocked_stock": 0,
+                      "cached_allocated_quantity": 0,
+                      "created_at": "2020-09-01 00:00:00",
+                      "updated_at": "2020-09-01 00:00:00"
+                    }
+                  ],
+                  "warehouse": {
+                    "id": 1,
+                    "name": "自社倉庫"
+                  },
+                  "destination": {
+                    "id": 2,
+                    "name": "外部倉庫"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "OAuth2": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://app2.logiless.com/oauth/v2/auth",
+            "tokenUrl": "https://app2.logiless.com/oauth2/token",
+            "scopes": {}
+          }
+        }
+      }
+    },
+    "schemas": {
+      "InterWarehouseTransfer": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "[読取専用] ID。倉庫間移動伝票をユニークに識別するための数値です。主に、APIでのアクセスに使用します。"
+          },
+          "code": {
+            "type": "string",
+            "description": "指示コード"
+          },
+          "status": {
+            "type": "string",
+            "description": "伝票ステータス",
+            "enum": [
+              "Processing",
+              "WaitingForPayment",
+              "WaitingForAllocation",
+              "WaitingForShipment",
+              "Shipped",
+              "Cancel"
+            ]
+          },
+          "delivery_status": {
+            "type": "string",
+            "description": "配送ステータス",
+            "enum": [
+              "WaitingForShipment",
+              "Working",
+              "PartlyShipped",
+              "Shipped",
+              "Pending",
+              "Cancel"
+            ]
+          },
+          "delivery_method": {
+            "type": "string",
+            "description": "配送方法",
+            "enum": [
+              "yamato",
+              "yamato_compact",
+              "yamato_nekoposu",
+              "yamato_mail",
+              "yamato_poa",
+              "sagawa",
+              "sagawa_mail",
+              "sagawa_yu_mail",
+              "you_pack",
+              "you_pack_poa",
+              "yu_packet",
+              "yu_packet_1cm",
+              "yu_packet_2cm",
+              "yu_packet_3cm",
+              "yu_mail",
+              "yu_mail_150g",
+              "yu_mail_250g",
+              "yu_mail_500g",
+              "yu_mail_1000g",
+              "letter_pack_plus",
+              "letter_pack_light",
+              "standard_size_mail",
+              "non_standard_size_mail",
+              "click_post",
+              "ems",
+              "international_e_packet",
+              "acceptance_recorded_mail",
+              "small_packing",
+              "seino_express",
+              "seino_mini",
+              "ecohai",
+              "dhl",
+              "fed_ex",
+              "ups",
+              "ecms",
+              "pegasus",
+              "global_e_parcel",
+              "rakuten_express",
+              "rakuten_express_mail",
+              "yamato_rakuten_cvs_receipt",
+              "japan_post_rakuten_cvs_receipt",
+              "japan_post_rakuten_po_receipt",
+              "sagawa_rakuten_cvs_receipt",
+              "yamato_box_charter",
+              "jad",
+              "sbs_sokuhai",
+              "nittsu",
+              "nittsu_express_high_speed",
+              "fukutsu",
+              "tonami",
+              "kinbutsu_rex",
+              "toll_express",
+              "kurume",
+              "sanyo_jidosha",
+              "last_one_mile_personal_delivery",
+              "last_one_mile_business_delivery",
+              "delivery_provider",
+              "in_store_pickup",
+              "in_warehouse_pickup",
+              "manufacturer_direct",
+              "charter"
+            ]
+          },
+          "delivery_preferred_date": {
+            "type": "string",
+            "description": "お届け希望日 - `Y-m-d`形式 (例 : `2018-01-01`)"
+          },
+          "delivery_preferred_time_zone": {
+            "type": "string",
+            "description": "お届け希望時間帯"
+          },
+          "attr1": {
+            "type": "string",
+            "description": "フリー項目1"
+          },
+          "attr2": {
+            "type": "string",
+            "description": "フリー項目2"
+          },
+          "attr3": {
+            "type": "string",
+            "description": "フリー項目3"
+          },
+          "attr4": {
+            "type": "string",
+            "description": "フリー項目4"
+          },
+          "attr5": {
+            "type": "string",
+            "description": "フリー項目5"
+          },
+          "attr6": {
+            "type": "string",
+            "description": "フリー項目6"
+          },
+          "attr7": {
+            "type": "string",
+            "description": "フリー項目7"
+          },
+          "attr8": {
+            "type": "string",
+            "description": "フリー項目8"
+          },
+          "attr9": {
+            "type": "string",
+            "description": "フリー項目9"
+          },
+          "attr10": {
+            "type": "string",
+            "description": "フリー項目10"
+          },
+          "ordered_at": {
+            "type": "string",
+            "description": "依頼日時 - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`) - デフォルトは現在時刻"
+          },
+          "finished_at": {
+            "type": "string",
+            "readOnly": true,
+            "description": "[読取専用] 完了日時 - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`)"
+          },
+          "created_at": {
+            "type": "string",
+            "readOnly": true,
+            "description": "[読取専用] 登録日時 - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`)"
+          },
+          "updated_at": {
+            "type": "string",
+            "readOnly": true,
+            "description": "[読取専用] 更新日時 - `Y-m-d H:i:s`形式 (例 : `2018-01-01 23:59:59`)"
+          },
+          "lines": {
+            "type": "array",
+            "description": "明細行",
+            "items": {
+              "$ref": "#/components/schemas/InterWarehouseTransferLine"
+            }
+          },
+          "warehouse": {
+            "description": "出荷元倉庫",
+            "$ref": "#/components/schemas/Warehouse"
+          },
+          "destination": {
+            "description": "納品先倉庫",
+            "$ref": "#/components/schemas/Warehouse"
+          }
+        }
+      },
+      "InterWarehouseTransferLine": {
+        "type": "object",
+        "required": [
+          "article_code",
+          "article_name"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "[読取専用] ID。倉庫間移動伝票明細行をユニークに識別するための数値です。主に、APIでのアクセスに使用します。"
+          },
+          "code": {
+            "type": "string",
+            "description": "明細行コード"
+          },
+          "status": {
+            "type": "string",
+            "readOnly": true,
+            "description": "[読取専用] 明細ステータス",
+            "enum": [
+              "WaitingForTransfer",
+              "WaitingForAllocation",
+              "Allocated",
+              "Shipped",
+              "Cancel"
+            ]
+          },
+          "article_code": {
+            "type": "string",
+            "description": "[必須] 商品コード"
+          },
+          "article_name": {
+            "type": "string",
+            "description": "[必須] 商品名"
+          },
+          "article_option": {
+            "type": "string",
+            "description": "明細行備考欄"
+          },
+          "quantity": {
+            "type": "integer",
+            "description": "数量"
+          },
+          "uses_blocked_stock": {
+            "type": "integer",
+            "description": "保留在庫を引き当てるかどうか"
+          },
+          "cached_allocated_quantity": {
+            "type": "integer",
+            "description": "引当済み数量"
+          },
+          "article": {
+            "type": "object",
+            "readOnly": true,
+            "description": "[読取専用] 商品マスタ"
+          }
+        }
+      },
+      "Warehouse": {
+        "type": "object",
+        "description": "倉庫",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "倉庫ID"
+          },
+          "name": {
+            "type": "string",
+            "description": "倉庫名"
+          }
+        }
+      }
+    }
+  }
+}
